@@ -1,0 +1,14 @@
+import type { NextFunction, Request, Response } from "express";
+
+export function notFoundHandler(
+  request: Request,
+  response: Response,
+  next: NextFunction
+): void {
+  const error = new Error(
+    `Route not found: ${request.method} ${request.originalUrl}`
+  );
+
+  response.status(404);
+  next(error);
+}
