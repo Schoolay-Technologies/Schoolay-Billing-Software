@@ -31,8 +31,10 @@ const navigationItems = [
 },
 
 {
-  name: "Student Size Records",
-  path: "/student-size-records"
+  
+  name: "Student Measurements",
+  path: "/student-measurements"
+
 }
 
 ];

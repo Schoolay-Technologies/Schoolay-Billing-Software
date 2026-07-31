@@ -16,7 +16,7 @@ import orderTrackingRoutes from "./routes/orderTracking.routes.js";
 import productionRoutes from "./routes/production.routes.js";
 import reportRoutes from "./routes/report.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
-import studentSizeRecordRoutes from "./routes/studentSizeRecord.routes.js";
+import studentMeasurementRoutes from "./routes/studentSizeRecord.routes.js";
 
 const app: Application = express();
 
@@ -70,8 +70,10 @@ app.use("/api/v1/order-tracking", orderTrackingRoutes);
 app.use("/api/v1/production", productionRoutes);
 app.use("/api/v1/reports", reportRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
-app.use("/api/v1/student-size-records", studentSizeRecordRoutes);
-
+app.use(
+  "/api/v1/student-measurements",
+  studentMeasurementRoutes
+);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

@@ -1,79 +1,90 @@
 import { Router } from "express";
 
 import {
-  createStudentSizeRecordController,
-  deleteStudentSizeRecordController,
-  downloadStudentSizeExcelController,
-  getStudentSizeRecordByIdController,
-  getStudentSizeRecordsController,
-  getStudentSizeReportController,
-  updateStudentSizeRecordController
-} from "../controllers/studentSizeRecord.controller.js";
+  createStudentMeasurementController,
+  deleteStudentMeasurementController,
+  downloadStudentMeasurementExcelController,
+  getStudentMeasurementByIdController,
+  getStudentMeasurementReportController,
+  getStudentMeasurementsController,
+  updateStudentMeasurementController
+} from "../controllers/studentMeasurement.controller";
+
+import {
+  getStudentPhotoSignatureController
+} from "../controllers/studentPhoto.controller.js";
 
 import {
   validate
 } from "../middleware/validate.middleware.js";
 
 import {
-  createStudentSizeRecordSchema,
-  studentSizeRecordIdSchema,
-  updateStudentSizeRecordSchema
-} from "../schemas/studentSizeRecord.schema.js";
+  createStudentMeasurementSchema,
+  studentMeasurementIdSchema,
+  updateStudentMeasurementSchema
+} from "../schemas/studentMeasurement.schema.js";
 
 const router = Router();
 
 /*
- * These routes must appear before "/:id".
- * Otherwise Express may treat "reports" as a record ID.
+ * Fixed routes must always come before "/:id".
+ * Otherwise Express may treat words like
+ * "photo" or "reports" as a MongoDB record ID.
  */
+
+router.get(
+  "/photo/signature",
+  getStudentPhotoSignatureController
+);
+
 router.get(
   "/reports/data",
-  getStudentSizeReportController
+  getStudentMeasurementReportController
 );
 
 router.get(
   "/reports/excel",
-  downloadStudentSizeExcelController
+  downloadStudentMeasurementExcelController
 );
 
 router.post(
   "/",
   validate(
-    createStudentSizeRecordSchema
+    createStudentMeasurementSchema
   ),
-  createStudentSizeRecordController
+  createStudentMeasurementController
 );
 
 router.get(
   "/",
-  getStudentSizeRecordsController
+  getStudentMeasurementsController
 );
 
 router.get(
   "/:id",
   validate(
-    studentSizeRecordIdSchema
+    studentMeasurementIdSchema
   ),
-  getStudentSizeRecordByIdController
+  getStudentMeasurementByIdController
 );
 
 router.patch(
   "/:id",
   validate(
-    studentSizeRecordIdSchema
+    studentMeasurementIdSchema
   ),
   validate(
-    updateStudentSizeRecordSchema
+    updateStudentMeasurementSchema
   ),
-  updateStudentSizeRecordController
+  updateStudentMeasurementController
 );
 
 router.delete(
   "/:id",
   validate(
-    studentSizeRecordIdSchema
+    studentMeasurementIdSchema
   ),
-  deleteStudentSizeRecordController
+  deleteStudentMeasurementController
 );
 
 export default router;

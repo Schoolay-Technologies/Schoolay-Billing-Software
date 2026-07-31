@@ -19,8 +19,8 @@ import OrderTrackingPage from
   import ReportsPage from
   "./pages/reports/ReportsPage";
 
-  import StudentSizeRecordsPage from
-  "./pages/studentSizeRecords/StudentSizeRecordsPage";
+import StudentMeasurementsPage from
+  "./pages/studentMeasurements/StudentMeasurementsPage";
   
 function ComingSoonPage({ title }: { title: string }) {
   return (
@@ -80,8 +80,10 @@ const router = createBrowserRouter([
 },
 
 {
-  path: "student-size-records",
-  element: <StudentSizeRecordsPage />
+  
+  path: "student-measurements",
+  element: <StudentMeasurementsPage />
+
 },
       {
         path: "reports",
