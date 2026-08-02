@@ -36,7 +36,6 @@ import type {
   ReportFilters,
   ReportOption,
   ReportResponse,
-  ReportSummary,
   ReportType
 } from "../../types/report.types";
 

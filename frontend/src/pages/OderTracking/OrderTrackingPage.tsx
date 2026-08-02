@@ -9,7 +9,6 @@ import {
 import {
   getOrderTrackingById,
   getOrderTrackingList,
-  updateExchangeStatus,
   updateOrderDistribution
 } from "../../api/orderTracking.api";
 import { getProducts } from "../../api/product.api";
@@ -22,7 +21,6 @@ import Modal from "../../components/common/Modal";
 import type {
   DistributionItemInput,
   DistributionPlace,
-  ExchangeStatus,
   FulfilmentStatus,
   PendingReason,
   TrackedInvoice,
@@ -69,17 +67,7 @@ const distributionPlaceOptions: Array<{
   { value: "OTHER", label: "Other" }
 ];
 
-const exchangeStatusOptions: Array<{
-  value: ExchangeStatus;
-  label: string;
-}> = [
-  { value: "REQUESTED", label: "Requested" },
-  { value: "ITEM_COLLECTED", label: "Item Collected" },
-  { value: "REPLACEMENT_PENDING", label: "Replacement Pending" },
-  { value: "REPLACEMENT_READY", label: "Replacement Ready" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" }
-];
+
 
 function formatLabel(value: string | null | undefined): string {
   if (!value) {
@@ -614,42 +602,7 @@ export default function OrderTrackingPage() {
     }
   }
 
-  async function handleExchangeStatus(
-    exchangeId: string,
-    status: ExchangeStatus
-  ): Promise<void> {
-    if (!selectedOrder) {
-      return;
-    }
 
-    try {
-      setIsSubmitting(true);
-      setNotification(null);
-
-      const result = await updateExchangeStatus(
-        selectedOrder._id,
-        exchangeId,
-        status
-      );
-
-      setSelectedOrder(result.data);
-
-      setNotification({
-        type: "success",
-        message:
-          "Exchange status updated successfully."
-      });
-
-      await loadOrders();
-    } catch (error) {
-      setNotification({
-        type: "error",
-        message: getErrorMessage(error)
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   function handleSearchSubmit(
     event: FormEvent<HTMLFormElement>
@@ -1633,73 +1586,6 @@ export default function OrderTrackingPage() {
                       {history.remarks && (
                         <p>{history.remarks}</p>
                       )}
-                    </article>
-                  )
-                )
-              )}
-
-              <h3>Exchange Requests</h3>
-
-              {(selectedOrder.exchangeRequests ?? [])
-                .length === 0 ? (
-                <div className="empty-state">
-                  <p>No exchange requests.</p>
-                </div>
-              ) : (
-                (selectedOrder.exchangeRequests ?? []).map(
-                  (exchange) => (
-                    <article
-                      className="exchange-history-card"
-                      key={exchange._id}
-                    >
-                      <div>
-                        <strong>
-                          {exchange.originalProductName} – Size{" "}
-                          {exchange.originalSize}
-                        </strong>
-
-                        <p>
-                          Replacement:{" "}
-                          {exchange.replacementProductName} – Size{" "}
-                          {exchange.replacementSize}
-                        </p>
-
-                        <p>
-                          Quantity: {exchange.exchangeQuantity}
-                        </p>
-
-                        <p>Reason: {exchange.reason}</p>
-
-                        <p>
-                          Raised:{" "}
-                          {exchange.raisedAt
-                            ? new Date(
-                                exchange.raisedAt
-                              ).toLocaleString("en-IN")
-                            : "—"}
-                        </p>
-                      </div>
-
-                      <select
-                        value={exchange.status}
-                        disabled={isSubmitting}
-                        onChange={(event) =>
-                          void handleExchangeStatus(
-                            exchange._id,
-                            event.target
-                              .value as ExchangeStatus
-                          )
-                        }
-                      >
-                        {exchangeStatusOptions.map((option) => (
-                          <option
-                            key={option.value}
-                            value={option.value}
-                          >
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
                     </article>
                   )
                 )
