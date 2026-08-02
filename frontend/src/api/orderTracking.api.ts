@@ -10,7 +10,12 @@ import type {
 
 interface GetTrackingParameters {
   schoolId?: string;
+  invoiceNumber?: string;
+  studentName?: string;
   search?: string;
+  searchType?: "invoice" | "student" | "both";
+  fromDate?: string;
+  toDate?: string;
   fulfilmentStatus?:
     | FulfilmentStatus
     | "";

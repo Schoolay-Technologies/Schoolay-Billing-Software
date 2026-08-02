@@ -17,11 +17,9 @@ function calculateItemStatus(
   if (deliveredQuantity === 0) {
     return "NOT_COMPLETED";
   }
-
   if (deliveredQuantity >= orderedQuantity) {
     return "COMPLETELY_DELIVERED";
   }
-
   return "PARTIALLY_COMPLETED";
 }
 
@@ -32,35 +30,31 @@ function calculateInvoiceStatus(
   if (deliveredQuantity === 0) {
     return "NOT_COMPLETED";
   }
-
   if (deliveredQuantity >= orderedQuantity) {
     return "COMPLETELY_DELIVERED";
   }
-
   return "PARTIALLY_COMPLETED";
 }
 
-export async function getOrderTrackingList(
-  options: {
-    schoolId?: string;
-    search?: string;
-    fulfilmentStatus?: FulfilmentStatus;
-    placeOfOrder?: string;
-    page?: number;
-    limit?: number;
-  }
-) {
+export async function getOrderTrackingList(options: {
+  schoolId?: string;
+  search?: string;
+  searchType?: "invoice" | "student" | "both";
+  fulfilmentStatus?: FulfilmentStatus;
+  placeOfOrder?: string;
+  fromDate?: string;
+  toDate?: string;
+  page?: number;
+  limit?: number;
+}) {
   const page = Math.max(options.page ?? 1, 1);
-
-  const limit = Math.min(
-    Math.max(options.limit ?? 10, 1),
-    100
-  );
+  const limit = Math.min(Math.max(options.limit ?? 10, 1), 100);
 
   const filter: Record<string, unknown> = {
     invoiceStatus: "COMPLETED"
   };
 
+  // School filter
   if (options.schoolId) {
     if (!Types.ObjectId.isValid(options.schoolId)) {
       throw new Error("Invalid school ID.");
@@ -68,41 +62,54 @@ export async function getOrderTrackingList(
     filter.schoolId = options.schoolId;
   }
 
+  // Fulfilment status filter
   if (options.fulfilmentStatus) {
     filter.fulfilmentStatus = options.fulfilmentStatus;
   }
 
+  // Place of order filter
   if (options.placeOfOrder) {
     filter.placeOfOrder = options.placeOfOrder;
   }
 
-  if (options.search) {
-    filter.$or = [
-      {
-        invoiceNumber: {
-          $regex: options.search,
-          $options: "i"
-        }
-      },
-      {
-        studentName: {
-          $regex: options.search,
-          $options: "i"
-        }
-      },
-      {
-        contactNumber: {
-          $regex: options.search,
-          $options: "i"
-        }
-      },
-      {
-        schoolName: {
-          $regex: options.search,
-          $options: "i"
-        }
-      }
-    ];
+  // Search functionality - invoice number and/or student name
+  if (options.search && options.search.trim()) {
+    const searchRegex = {
+      $regex: options.search,
+      $options: "i"
+    };
+
+    const searchType = options.searchType || "both";
+
+    if (searchType === "invoice") {
+      filter.invoiceNumber = searchRegex;
+    } else if (searchType === "student") {
+      filter.studentName = searchRegex;
+    } else {
+      // "both" - search in both fields
+      filter.$or = [
+        { invoiceNumber: searchRegex },
+        { studentName: searchRegex }
+      ];
+    }
+  }
+
+  // Date range filter
+  if (options.fromDate || options.toDate) {
+    const invoiceDate: {
+      $gte?: Date;
+      $lte?: Date;
+    } = {};
+
+    if (options.fromDate) {
+      invoiceDate.$gte = new Date(`${options.fromDate}T00:00:00.000`);
+    }
+
+    if (options.toDate) {
+      invoiceDate.$lte = new Date(`${options.toDate}T23:59:59.999`);
+    }
+
+    filter.invoiceDate = invoiceDate;
   }
 
   const skip = (page - 1) * limit;
@@ -131,16 +138,12 @@ export async function getOrderTrackingList(
   };
 }
 
-export async function getOrderTrackingByInvoiceId(
-  invoiceId: string
-) {
+export async function getOrderTrackingByInvoiceId(invoiceId: string) {
   if (!Types.ObjectId.isValid(invoiceId)) {
     throw new Error("Invalid invoice ID.");
   }
 
-  const invoice = await InvoiceModel.findById(
-    invoiceId
-  ).lean();
+  const invoice = await InvoiceModel.findById(invoiceId).lean();
 
   if (!invoice) {
     throw new Error("Invoice not found.");
@@ -157,24 +160,18 @@ export async function updateDistribution(
     throw new Error("Invalid invoice ID.");
   }
 
-  const invoice = await InvoiceModel.findById(
-    invoiceId
-  );
+  const invoice = await InvoiceModel.findById(invoiceId);
 
   if (!invoice) {
     throw new Error("Invoice not found.");
   }
 
   if (invoice.invoiceStatus === "CANCELLED") {
-    throw new Error(
-      "A cancelled invoice cannot receive distribution updates."
-    );
+    throw new Error("A cancelled invoice cannot receive distribution updates.");
   }
 
   if (invoice.invoiceStatus === "DRAFT") {
-    throw new Error(
-      "A draft invoice cannot receive distribution updates."
-    );
+    throw new Error("A draft invoice cannot receive distribution updates.");
   }
 
   const historyItems: Array<{
@@ -192,9 +189,7 @@ export async function updateDistribution(
       throw new Error("Invalid invoice item ID.");
     }
 
-    const invoiceItem = invoice.items.id(
-      updateItem.invoiceItemId
-    );
+    const invoiceItem = invoice.items.id(updateItem.invoiceItemId);
 
     if (!invoiceItem) {
       throw new Error("Invoice item was not found.");
@@ -277,5 +272,3 @@ export async function updateDistribution(
 
   return invoice;
 }
-
-// REMOVED: updateExchangeStatus function

@@ -1158,138 +1158,143 @@ const payload: CreateInvoiceInput = {
 
       <div className="content-card">
         <form
-          className="filter-section invoice-filters"
-          onSubmit={handleSearchSubmit}
-        >
-          <div className="search-group">
-            <input
-              type="search"
-              value={searchInput}
-              onChange={(event) =>
-                setSearchInput(event.target.value)
-              }
-              placeholder="Invoice number, student, class or phone"
-            />
+  className="filter-section invoice-filters"
+  onSubmit={handleSearchSubmit}
+>
+  {/* Row 1: Search Input and Search Button */}
+  <div className="search-row">
+    <div className="search-input-wrapper">
+      <input
+        type="search"
+        value={searchInput}
+        onChange={(event) =>
+          setSearchInput(event.target.value)
+        }
+        placeholder="Invoice number, student, class or phone"
+      />
+    </div>
 
-            <button
-              type="submit"
-              className="secondary-button"
-            >
-              Search
-            </button>
-          </div>
+    <button
+      type="submit"
+      className="search-button"
+    >
+      Search
+    </button>
+  </div>
 
-          <select
-            value={schoolFilter}
-            onChange={(event) => {
-              setSchoolFilter(event.target.value);
-
-              setPagination((currentValue) => ({
-                ...currentValue,
-                page: 1
-              }));
-            }}
+  {/* Row 2: All Filters Side by Side */}
+  <div className="filters-row">
+    <div className="filter-group">
+      <label className="filter-label">School</label>
+      <select
+        value={schoolFilter}
+        onChange={(event) => {
+          setSchoolFilter(event.target.value);
+          setPagination((currentValue) => ({
+            ...currentValue,
+            page: 1
+          }));
+        }}
+      >
+        <option value="">All schools</option>
+        {schools.map((school) => (
+          <option
+            key={school._id}
+            value={school._id}
           >
-            <option value="">All schools</option>
+            {school.schoolName}
+          </option>
+        ))}
+      </select>
+    </div>
 
-            {schools.map((school) => (
-              <option
-                key={school._id}
-                value={school._id}
-              >
-                {school.schoolName}
-              </option>
-            ))}
-          </select>
+    <div className="filter-group">
+      <label className="filter-label">Invoice Status</label>
+      <select
+        value={invoiceStatusFilter}
+        onChange={(event) => {
+          setInvoiceStatusFilter(
+            event.target.value as
+              | InvoiceStatus
+              | ""
+          );
+          setPagination((currentValue) => ({
+            ...currentValue,
+            page: 1
+          }));
+        }}
+      >
+        <option value="">All statuses</option>
+        <option value="DRAFT">Draft</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </div>
 
-          <select
-            value={invoiceStatusFilter}
-            onChange={(event) => {
-              setInvoiceStatusFilter(
-                event.target.value as
-                  | InvoiceStatus
-                  | ""
-              );
+    <div className="filter-group">
+      <label className="filter-label">Payment Status</label>
+      <select
+        value={paymentStatusFilter}
+        onChange={(event) => {
+          setPaymentStatusFilter(
+            event.target.value as
+              | PaymentStatus
+              | ""
+          );
+          setPagination((currentValue) => ({
+            ...currentValue,
+            page: 1
+          }));
+        }}
+      >
+        <option value="">All payments</option>
+        <option value="PENDING">Pending</option>
+        <option value="PARTIALLY_PAID">Partially Paid</option>
+        <option value="PAID">Paid</option>
+      </select>
+    </div>
 
-              setPagination((currentValue) => ({
-                ...currentValue,
-                page: 1
-              }));
-            }}
-          >
-            <option value="">
-              All invoice statuses
-            </option>
-            <option value="DRAFT">Draft</option>
-            <option value="COMPLETED">
-              Completed
-            </option>
-            <option value="CANCELLED">
-              Cancelled
-            </option>
-          </select>
+    <div className="filter-group">
+      <label className="filter-label">Date From</label>
+      <input
+        type="date"
+        value={dateFrom}
+        onChange={(event) => {
+          setDateFrom(event.target.value);
+          setPagination((currentValue) => ({
+            ...currentValue,
+            page: 1
+          }));
+        }}
+      />
+    </div>
 
-          <select
-            value={paymentStatusFilter}
-            onChange={(event) => {
-              setPaymentStatusFilter(
-                event.target.value as
-                  | PaymentStatus
-                  | ""
-              );
+    <div className="filter-group">
+      <label className="filter-label">Date To</label>
+      <input
+        type="date"
+        value={dateTo}
+        onChange={(event) => {
+          setDateTo(event.target.value);
+          setPagination((currentValue) => ({
+            ...currentValue,
+            page: 1
+          }));
+        }}
+      />
+    </div>
 
-              setPagination((currentValue) => ({
-                ...currentValue,
-                page: 1
-              }));
-            }}
-          >
-            <option value="">
-              All payment statuses
-            </option>
-            <option value="PENDING">
-              Pending
-            </option>
-            <option value="PARTIALLY_PAID">
-              Partially Paid
-            </option>
-            <option value="PAID">Paid</option>
-          </select>
-
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(event) => {
-              setDateFrom(event.target.value);
-
-              setPagination((currentValue) => ({
-                ...currentValue,
-                page: 1
-              }));
-            }}
-          />
-
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(event) => {
-              setDateTo(event.target.value);
-
-              setPagination((currentValue) => ({
-                ...currentValue,
-                page: 1
-              }));
-            }}
-          />
-
-          <button
-            type="button"
-            className="text-button"
-            onClick={clearFilters}
-          >
-            Clear
-          </button>
-        </form>
+    <div className="clear-filter-group">
+      <button
+        type="button"
+        className="clear-button"
+        onClick={clearFilters}
+      >
+        Clear All
+      </button>
+    </div>
+  </div>
+</form>
 
         {isLoading ? (
           <LoadingSpinner message="Loading invoices..." />

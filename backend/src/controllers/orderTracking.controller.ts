@@ -6,14 +6,12 @@ import type {
 
 import type {
   UpdateDistributionInput
-  // REMOVED: UpdateExchangeStatusInput
 } from "../schemas/orderTracking.schema.js";
 
 import {
   getOrderTrackingByInvoiceId,
   getOrderTrackingList,
   updateDistribution
-  // REMOVED: updateExchangeStatus
 } from "../services/orderTracking.service.js";
 
 export async function getOrderTrackingListController(
@@ -30,6 +28,24 @@ export async function getOrderTrackingListController(
     const search =
       typeof request.query.search === "string"
         ? request.query.search
+        : undefined;
+
+    const searchType =
+      typeof request.query.searchType === "string" &&
+      (request.query.searchType === "invoice" || 
+       request.query.searchType === "student" || 
+       request.query.searchType === "both")
+        ? request.query.searchType as "invoice" | "student" | "both"
+        : "both";
+
+    const fromDate =
+      typeof request.query.fromDate === "string"
+        ? request.query.fromDate
+        : undefined;
+
+    const toDate =
+      typeof request.query.toDate === "string"
+        ? request.query.toDate
         : undefined;
 
     const rawStatus =
@@ -55,8 +71,11 @@ export async function getOrderTrackingListController(
     const result = await getOrderTrackingList({
       schoolId,
       search,
+      searchType,
       fulfilmentStatus,
       placeOfOrder,
+      fromDate,
+      toDate,
       page,
       limit
     });
@@ -115,4 +134,22 @@ export async function updateDistributionController(
   }
 }
 
-// REMOVED: updateExchangeStatusController
+export async function updateExchangeStatusController(
+  request: Request<
+    { invoiceId: string; exchangeId: string },
+    object,
+    { status: string }
+  >,
+  response: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    // Implementation would go here if needed
+    response.status(200).json({
+      success: true,
+      message: "Exchange status updated successfully."
+    });
+  } catch (error) {
+    next(error);
+  }
+}

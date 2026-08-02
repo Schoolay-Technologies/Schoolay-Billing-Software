@@ -17,13 +17,15 @@ import productionRoutes from "./routes/production.routes.js";
 import reportRoutes from "./routes/report.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import studentMeasurementRoutes from "./routes/studentSizeRecord.routes.js";
+import campRoutes from
+  "./routes/camp.routes.js";
 
 const app: Application = express();
 
 // ✅ CORS - First middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
@@ -74,6 +76,11 @@ app.use(
   "/api/v1/student-measurements",
   studentMeasurementRoutes
 );
+app.use(
+  "/api/v1/camps",
+  campRoutes
+);
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 

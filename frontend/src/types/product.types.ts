@@ -13,7 +13,7 @@ export type ProductStatus =
   | "INACTIVE";
 
 export interface ProductVariant {
-  _id?: string;
+  _id: string;
   size: string;
   unitPrice: number;
   gstPercentage: number;

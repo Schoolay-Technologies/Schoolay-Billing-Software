@@ -1,3 +1,4 @@
+// components/layout/AppLayout.tsx
 import { NavLink, Outlet } from "react-router-dom";
 
 const navigationItems = [
@@ -26,17 +27,19 @@ const navigationItems = [
     path: "/reports"
   },
   {
-  name: "Tracking of Order",
-  path: "/order-tracking"
+    name: "Tracking of Order",
+    path: "/order-tracking"
+  },
+  {
+    name: "Student Measurements",
+    path: "/student-measurements"
+  },
+
+  {
+  name: "School Camps",
+  path: "/camps"
 },
-
-{
-  
-  name: "Student Measurements",
-  path: "/student-measurements"
-
-}
-
+  // Add Camp QR menu items
 ];
 
 export default function AppLayout() {
