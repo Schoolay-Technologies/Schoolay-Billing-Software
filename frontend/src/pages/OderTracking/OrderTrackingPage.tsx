@@ -3,7 +3,6 @@ import {
   type FormEvent,
   useCallback,
   useEffect,
-  useMemo,
   useState
 } from "react";
 
@@ -354,22 +353,6 @@ export default function OrderTrackingPage() {
     void loadOrders();
   }, [loadOrders]);
 
-  const trackingSummary = useMemo(() => {
-    return orders.reduce(
-      (summary, order) => {
-        summary.ordered += getTotalOrderedQuantity(order);
-        summary.delivered += getTotalDeliveredQuantity(order);
-        summary.pending += getTotalPendingQuantity(order);
-
-        return summary;
-      },
-      {
-        ordered: 0,
-        delivered: 0,
-        pending: 0
-      }
-    );
-  }, [orders]);
 
   async function openTrackingModal(
     invoiceId: string

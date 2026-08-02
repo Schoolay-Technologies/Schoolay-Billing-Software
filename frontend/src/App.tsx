@@ -16,24 +16,7 @@ import StudentMeasurementsPage from "./pages/studentMeasurements/StudentMeasurem
 import CampsPage from
   "./pages/camps/CampsPage";
 
-function ComingSoonPage({ title }: { title: string }) {
-  return (
-    <section>
-      <div className="page-heading">
-        <div>
-          <h1>{title}</h1>
-          <p>This module will be developed in the next phase.</p>
-        </div>
-      </div>
-      <div className="content-card">
-        <div className="empty-state">
-          <h3>{title} module</h3>
-          <p>Development will begin after School Management.</p>
-        </div>
-      </div>
-    </section>
-  );
-}
+
 
 const router = createBrowserRouter([
   {

@@ -1,7 +1,6 @@
 import { api } from "./axios";
 
 import type {
-  Camp,
   CampFormInput,
   CampListResponse,
   CampQrResponse,

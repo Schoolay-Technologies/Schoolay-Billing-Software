@@ -88,25 +88,43 @@ export interface DistributionHistory {
   remarks: string;
 }
 
-export interface TrackedInvoice
-  extends Omit<Invoice, "items"> {
-  items: TrackedInvoiceItem[];
+export type TrackedInvoice =
+  Omit<
+    Invoice,
+    | "items"
+    | "schoolId"
+    | "fulfilmentStatus"
+    | "totalOrderedQuantity"
+    | "totalDeliveredQuantity"
+    | "totalPendingQuantity"
+    | "distributionHistory"
+  > & {
+    schoolId:
+      | string
+      | {
+          _id: string;
+          schoolName?: string;
+          schoolCode?: string;
+        };
 
-  placeOfOrder?: Invoice["placeOfOrder"];
-  specializedStoreName?: string;
+    items:
+      TrackedInvoiceItem[];
 
-  fulfilmentStatus?: FulfilmentStatus;
+    fulfilmentStatus:
+      FulfilmentStatus;
 
-  totalOrderedQuantity?: number;
-  totalDeliveredQuantity?: number;
-  totalPendingQuantity?: number;
+    totalOrderedQuantity:
+      number;
 
-  distributionHistory:
-    DistributionHistory[];
+    totalDeliveredQuantity:
+      number;
 
-  exchangeRequests:
-    ExchangeRequest[];
-}
+    totalPendingQuantity:
+      number;
+
+    distributionHistory:
+      DistributionHistory[];
+  };
 
 export interface OrderTrackingResponse {
   success: boolean;

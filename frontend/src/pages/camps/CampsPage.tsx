@@ -178,16 +178,6 @@ function getCampSchoolId(
     : camp.schoolId._id;
 }
 
-function getProductVariantIds(
-  product:
-    Camp["products"][number]
-): string[] {
-  return product.variants.map(
-    (variant) =>
-      variant.variantId
-  );
-}
-
 export default function CampsPage() {
   const [
     camps,

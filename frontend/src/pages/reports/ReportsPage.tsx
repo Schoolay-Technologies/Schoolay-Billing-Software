@@ -116,16 +116,6 @@ const initialFilters: ReportFilters = {
   paymentMode: ""
 };
 
-const emptySummary: ReportSummary = {
-  totalInvoices: 0,
-  totalQuantity: 0,
-  taxableAmount: 0,
-  totalGstAmount: 0,
-  grandTotal: 0,
-  paidAmount: 0,
-  pendingAmount: 0
-};
-
 function getErrorMessage(
   error: unknown
 ): string {
