@@ -16,7 +16,8 @@ import StudentMeasurementsPage from "./pages/studentMeasurements/StudentMeasurem
 import CampsPage from
   "./pages/camps/CampsPage";
 
-
+import PublicCampOrderPage from
+  "./pages/publicCamp/PublicCampOrderPage";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,12 @@ const router = createBrowserRouter([
       {
   path: "camps",
   element: <CampsPage />
-}
+},
+ {
+      path: "/camp/:token",
+      element:
+        <PublicCampOrderPage />
+    },
       
     ]
   },
