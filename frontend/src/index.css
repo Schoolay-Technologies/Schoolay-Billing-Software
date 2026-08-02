@@ -4341,3 +4341,446 @@ textarea {
     width: 100%;
   }
 }
+
+.public-camp-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      180deg,
+      #fff7ed 0,
+      #f8fafc 290px
+    );
+  color: #172033;
+}
+
+.public-camp-header {
+  padding: 16px 20px;
+  background: #162738;
+  color: #fff;
+}
+
+.public-camp-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.public-camp-brand strong,
+.public-camp-brand span {
+  display: block;
+}
+
+.public-camp-brand strong {
+  font-size: 20px;
+}
+
+.public-camp-brand span {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.public-camp-logo {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: #ff7417;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.public-camp-container {
+  width: min(760px, calc(100% - 28px));
+  margin: 24px auto;
+}
+
+.public-camp-hero {
+  padding: 26px;
+  border-radius: 17px;
+  background: #162738;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 14px 30px rgba(22, 39, 56, 0.18);
+}
+
+.public-camp-hero h1 {
+  margin: 10px 0 5px;
+  font-size: clamp(26px, 5vw, 38px);
+}
+
+.public-camp-hero p {
+  margin: 0;
+  color: #d7e0e8;
+}
+
+.public-camp-code {
+  display: inline-flex;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.public-camp-date-box {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.public-camp-instructions,
+.public-camp-alert {
+  margin-top: 16px;
+  padding: 15px 17px;
+  border-radius: 11px;
+}
+
+.public-camp-instructions {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+}
+
+.public-camp-instructions p {
+  margin: 6px 0 0;
+  white-space: pre-wrap;
+}
+
+.public-camp-alert {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b42318;
+}
+
+.public-camp-form {
+  display: grid;
+  gap: 17px;
+  margin-top: 18px;
+}
+
+.public-camp-section {
+  padding: 22px;
+  border: 1px solid #e5e9ef;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+}
+
+.public-camp-section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.public-camp-section-title > span {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ff7417;
+  color: #fff;
+  font-weight: 800;
+}
+
+.public-camp-section-title h2,
+.public-camp-section-title p {
+  margin: 0;
+}
+
+.public-camp-section-title h2 {
+  font-size: 19px;
+}
+
+.public-camp-section-title p {
+  margin-top: 3px;
+  color: #687386;
+  font-size: 13px;
+}
+
+.public-camp-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.public-camp-form-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.public-camp-field {
+  min-width: 0;
+}
+
+.public-camp-field-full {
+  grid-column: 1 / -1;
+}
+
+.public-camp-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.public-camp-field label span {
+  color: #d92d20;
+}
+
+.public-camp-field input,
+.public-camp-field select,
+.public-camp-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid #cfd6df;
+  border-radius: 9px;
+  background: #fff;
+  color: #172033;
+  font: inherit;
+}
+
+.public-camp-field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.public-camp-field input:focus,
+.public-camp-field select:focus,
+.public-camp-field textarea:focus {
+  border-color: #ff7417;
+  outline: 3px solid rgba(255, 116, 23, 0.14);
+}
+
+.public-camp-item-list {
+  display: grid;
+  gap: 12px;
+}
+
+.public-camp-item-card {
+  padding: 16px;
+  border: 1px solid #e4e8ee;
+  border-radius: 11px;
+  background: #f8fafc;
+}
+
+.public-camp-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.public-camp-add-button,
+.public-camp-remove-button {
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.public-camp-add-button {
+  padding: 9px 12px;
+  border: 1px solid #ff7417;
+  border-radius: 8px;
+  color: #d95d00;
+}
+
+.public-camp-add-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.public-camp-remove-button {
+  color: #d92d20;
+}
+
+.public-camp-submit-section {
+  text-align: center;
+}
+
+.public-camp-submit-section p {
+  margin: 0 0 13px;
+  color: #687386;
+  font-size: 13px;
+}
+
+.public-camp-primary-button,
+.public-camp-secondary-button {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.public-camp-primary-button {
+  border: 0;
+  background: #ff7417;
+  color: #fff;
+}
+
+.public-camp-primary-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.public-camp-secondary-button {
+  border: 1px solid #cfd6df;
+  background: #fff;
+  color: #172033;
+}
+
+.public-camp-loading,
+.public-camp-error-card,
+.public-camp-success-card {
+  width: min(540px, calc(100% - 28px));
+  margin: 60px auto;
+  padding: 28px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1);
+}
+
+.public-camp-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  border: 4px solid #fed7aa;
+  border-top-color: #ff7417;
+  border-radius: 50%;
+  animation: public-camp-spin 0.8s linear infinite;
+}
+
+@keyframes public-camp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.public-camp-error-icon,
+.public-camp-success-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.public-camp-error-icon {
+  background: #fee4e2;
+  color: #d92d20;
+}
+
+.public-camp-success-icon {
+  background: #dcfae6;
+  color: #067647;
+}
+
+.public-camp-success-eyebrow {
+  margin: 0;
+  color: #067647;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.public-camp-success-card h1 {
+  margin: 8px 0;
+}
+
+.public-camp-success-description,
+.public-camp-save-message {
+  color: #687386;
+}
+
+.public-camp-invoice-box {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 22px 0;
+  text-align: left;
+}
+
+.public-camp-invoice-box > div {
+  padding: 13px;
+  border-radius: 9px;
+  background: #f8fafc;
+}
+
+.public-camp-invoice-box span,
+.public-camp-invoice-box strong {
+  display: block;
+}
+
+.public-camp-invoice-box span {
+  margin-bottom: 5px;
+  color: #687386;
+  font-size: 12px;
+}
+
+.public-camp-footer {
+  padding: 22px;
+  color: #687386;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .public-camp-container {
+    width: min(
+      100% - 20px,
+      760px
+    );
+    margin-top: 14px;
+  }
+
+  .public-camp-hero,
+  .public-camp-section {
+    padding: 18px;
+    border-radius: 13px;
+  }
+
+  .public-camp-form-grid,
+  .public-camp-invoice-box {
+    grid-template-columns: 1fr;
+  }
+
+  .public-camp-field-full {
+    grid-column: auto;
+  }
+
+  .public-camp-section-heading {
+    display: block;
+  }
+
+  .public-camp-add-button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .public-camp-date-box {
+    flex-wrap: wrap;
+  }
+}

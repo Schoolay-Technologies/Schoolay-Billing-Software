@@ -110,3 +110,83 @@ export interface CampQrResponse {
   success: boolean;
   data: CampQrData;
 }
+
+export interface PublicCampVariant {
+  variantId: string;
+  size: string;
+  sku: string;
+}
+
+export interface PublicCampProduct {
+  productId: string;
+  productName: string;
+  productCode: string;
+
+  gender:
+    | "MALE"
+    | "FEMALE"
+    | "UNISEX";
+
+  variants: PublicCampVariant[];
+}
+
+export interface PublicCamp {
+  campName: string;
+  campCode: string;
+
+  schoolName: string;
+  schoolCode: string;
+
+  startDate: string;
+  endDate: string;
+
+  instructions: string;
+
+  products: PublicCampProduct[];
+}
+
+export interface PublicCampResponse {
+  success: boolean;
+  data: PublicCamp;
+}
+
+export interface PublicCampOrderItemInput {
+  productId: string;
+  variantId: string;
+  quantity: number;
+}
+
+export interface PublicCampOrderInput {
+  studentName: string;
+  className: string;
+  section: string;
+
+  parentName: string;
+  contactNumber: string;
+  email: string;
+
+  items: PublicCampOrderItemInput[];
+
+  remarks: string;
+}
+
+export interface PublicCampOrderResult {
+  invoiceId: string;
+  invoiceNumber: string;
+
+  studentName: string;
+  schoolName: string;
+
+  grandTotal: number;
+
+  paymentStatus:
+    | "PENDING"
+    | "PARTIALLY_PAID"
+    | "PAID";
+}
+
+export interface PublicCampOrderResponse {
+  success: boolean;
+  message: string;
+  data: PublicCampOrderResult;
+}

@@ -5,7 +5,10 @@ import type {
   CampListResponse,
   CampQrResponse,
   CampResponse,
-  CampStatus
+  CampStatus,
+  PublicCampOrderInput,
+  PublicCampOrderResponse,
+  PublicCampResponse
 } from "../types/camp.types";
 
 export interface GetCampsParameters {
@@ -222,4 +225,32 @@ export async function sharePublicCampLink(
   });
 
   return true;
+}
+
+export async function getPublicCamp(
+  token: string
+): Promise<PublicCampResponse> {
+  const response =
+    await api.get<PublicCampResponse>(
+      `/camps/public/${encodeURIComponent(
+        token
+      )}`
+    );
+
+  return response.data;
+}
+
+export async function submitPublicCampOrder(
+  token: string,
+  input: PublicCampOrderInput
+): Promise<PublicCampOrderResponse> {
+  const response =
+    await api.post<PublicCampOrderResponse>(
+      `/camps/public/${encodeURIComponent(
+        token
+      )}/orders`,
+      input
+    );
+
+  return response.data;
 }
