@@ -327,6 +327,34 @@ async function prepareCampProducts(
   return preparedProducts;
 }
 
+function getDateOnlyValue(
+  value: Date | string
+): string {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    throw new Error(
+      "Invalid camp date."
+    );
+  }
+
+  return date
+    .toISOString()
+    .slice(0, 10);
+}
+
+function getCurrentDateInIndia(): string {
+  return new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }
+  ).format(new Date());
+}
+
 function ensureCampAcceptsOrders(
   camp: {
     status: CampStatus;
@@ -334,52 +362,32 @@ function ensureCampAcceptsOrders(
     endDate: Date;
   }
 ): void {
-  if (
-    camp.status !== "ACTIVE"
-  ) {
+  if (camp.status !== "ACTIVE") {
     throw new Error(
       "This camp is not currently accepting orders."
     );
   }
 
-  const now =
-    new Date();
+  const today =
+    getCurrentDateInIndia();
 
   const startDate =
-    new Date(
+    getDateOnlyValue(
       camp.startDate
     );
 
-  startDate.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
   const endDate =
-    new Date(
+    getDateOnlyValue(
       camp.endDate
     );
 
-  endDate.setHours(
-    23,
-    59,
-    59,
-    999
-  );
-
-  if (
-    now < startDate
-  ) {
+  if (today < startDate) {
     throw new Error(
       "This camp has not started yet."
     );
   }
 
-  if (
-    now > endDate
-  ) {
+  if (today > endDate) {
     throw new Error(
       "This camp has already ended."
     );

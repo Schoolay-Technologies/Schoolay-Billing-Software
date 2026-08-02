@@ -34,6 +34,31 @@ const campProductInputSchema =
       )
   });
 
+    const dateOnlySchema = z
+  .string()
+  .trim()
+  .regex(
+    /^\d{4}-\d{2}-\d{2}$/,
+    "Date must be in YYYY-MM-DD format."
+  )
+  .transform((value) => {
+    const date = new Date(
+      `${value}T00:00:00.000Z`
+    );
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      throw new Error(
+        "Invalid date."
+      );
+    }
+
+    return date;
+  });
+
 const campBodySchema =
   z
     .object({
@@ -63,10 +88,10 @@ const campBodySchema =
         objectIdSchema,
 
       startDate:
-        z.coerce.date(),
+  dateOnlySchema,
 
-      endDate:
-        z.coerce.date(),
+endDate:
+  dateOnlySchema,
 
       status: z
         .enum(
@@ -322,3 +347,4 @@ export type PublicCampOrderInput =
   z.infer<
     typeof publicCampOrderSchema
   >["body"];
+
