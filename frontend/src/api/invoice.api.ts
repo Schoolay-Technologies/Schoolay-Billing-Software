@@ -56,6 +56,47 @@ export async function getInvoiceById(
   return response.data;
 }
 
+export async function downloadInvoicesExcel(
+  fromDate: string,
+  toDate: string
+): Promise<void> {
+  const response =
+    await api.get<Blob>(
+      "/invoices/export/excel",
+      {
+        params: {
+          fromDate,
+          toDate
+        },
+        responseType: "blob"
+      }
+    );
+
+  const blobUrl =
+    window.URL.createObjectURL(
+      response.data
+    );
+
+  const link =
+    document.createElement("a");
+
+  link.href = blobUrl;
+
+  link.download =
+    `Invoices-${fromDate}-to-${toDate}.xlsx`;
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+  link.remove();
+
+  window.URL.revokeObjectURL(
+    blobUrl
+  );
+}
+
 export async function changeInvoiceStatus(
   invoiceId: string,
   invoiceStatus:

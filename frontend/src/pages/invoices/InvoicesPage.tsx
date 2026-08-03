@@ -7,9 +7,11 @@ import {
   useState
 } from "react";
 
+
 import {
   cancelInvoice,
   createInvoice,
+  downloadInvoicesExcel,
   getInvoiceById,
   getInvoices,
   updateInvoice
@@ -72,6 +74,7 @@ specializedStoreName: "",
   remarks: ""
 };
 
+
 function createInitialForm(): CreateInvoiceInput {
   return {
     ...initialForm,
@@ -82,6 +85,7 @@ function createInitialForm(): CreateInvoiceInput {
     ]
   };
 }
+
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -147,6 +151,8 @@ export default function InvoicesPage() {
   const [schools, setSchools] = useState<School[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
@@ -154,6 +160,21 @@ export default function InvoicesPage() {
     total: 0,
     totalPages: 0
   });
+
+  const [
+  exportFromDate,
+  setExportFromDate
+] = useState("");
+
+const [
+  exportToDate,
+  setExportToDate
+] = useState("");
+
+const [
+  isExportingExcel,
+  setIsExportingExcel
+] = useState(false);
 
   const [formData, setFormData] =
     useState<CreateInvoiceInput>(createInitialForm());
@@ -183,8 +204,7 @@ export default function InvoicesPage() {
   const [paymentStatusFilter, setPaymentStatusFilter] =
     useState<PaymentStatus | "">("");
 
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+ 
 
   const [isFormModalOpen, setIsFormModalOpen] =
     useState(false);
@@ -1128,6 +1148,59 @@ const payload: CreateInvoiceInput = {
     }));
   }
 
+  async function handleExportInvoices():
+  Promise<void> {
+  if (
+    !exportFromDate ||
+    !exportToDate
+  ) {
+    setNotification({
+      type: "error",
+      message:
+        "Select From Date and To Date."
+    });
+
+    return;
+  }
+
+  if (
+    exportToDate <
+    exportFromDate
+  ) {
+    setNotification({
+      type: "error",
+      message:
+        "To Date cannot be before From Date."
+    });
+
+    return;
+  }
+
+  try {
+    setIsExportingExcel(true);
+    setNotification(null);
+
+    await downloadInvoicesExcel(
+      exportFromDate,
+      exportToDate
+    );
+
+    setNotification({
+      type: "success",
+      message:
+        "Invoices exported successfully."
+    });
+  } catch (error) {
+    setNotification({
+      type: "error",
+      message:
+        getErrorMessage(error)
+    });
+  } finally {
+    setIsExportingExcel(false);
+  }
+}
+
   return (
     <section>
       <div className="page-heading">
@@ -1157,6 +1230,54 @@ const payload: CreateInvoiceInput = {
       )}
 
       <div className="content-card">
+      <div className="invoice-export-toolbar">
+
+  <div className="invoice-export-field">
+    <label htmlFor="exportFromDate">
+      From Date
+    </label>
+
+    <input
+      id="exportFromDate"
+      type="date"
+      value={exportFromDate}
+      onChange={(event) =>
+        setExportFromDate(event.target.value)
+      }
+    />
+  </div>
+
+  <div className="invoice-export-field">
+    <label htmlFor="exportToDate">
+      To Date
+    </label>
+
+    <input
+      id="exportToDate"
+      type="date"
+      value={exportToDate}
+      min={exportFromDate}
+      onChange={(event) =>
+        setExportToDate(event.target.value)
+      }
+    />
+  </div>
+
+  <button
+    type="button"
+    className="invoice-export-button"
+    disabled={isExportingExcel}
+    onClick={() =>
+      void handleExportInvoices()
+    }
+  >
+    📊{" "}
+    {isExportingExcel
+      ? "Exporting..."
+      : "Export Excel"}
+  </button>
+
+</div>
         <form
   className="filter-section invoice-filters"
   onSubmit={handleSearchSubmit}

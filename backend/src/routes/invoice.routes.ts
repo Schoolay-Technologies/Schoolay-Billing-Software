@@ -6,7 +6,8 @@ import {
   getInvoiceByIdController,
   getInvoicesController,
   updateInvoiceController,
-  updateInvoiceStatusController
+  updateInvoiceStatusController,
+  downloadInvoicesExcelController
 } from "../controllers/invoice.controller.js";
 
 import {
@@ -31,6 +32,11 @@ router.post(
 router.get(
   "/",
   getInvoicesController
+);
+
+router.get(
+  "/:id/excel",
+  downloadInvoicesExcelController
 );
 
 router.get(

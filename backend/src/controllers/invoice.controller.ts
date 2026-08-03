@@ -1,8 +1,13 @@
 import type {
   NextFunction,
   Request,
-  Response
+  Response,
+  RequestHandler
 } from "express";
+
+import {
+  generateInvoicesExcel
+} from "../services/invoiceExcel.service.js"
 
 import type {
   CreateInvoiceInput,
@@ -243,3 +248,49 @@ export async function cancelInvoiceController(
     next(error);
   }
 }
+
+export const downloadInvoicesExcelController:
+  RequestHandler = async (
+    request,
+    response,
+    next
+  ): Promise<void> => {
+    try {
+      const fromDate =
+        typeof request.query.fromDate ===
+        "string"
+          ? request.query.fromDate
+          : "";
+
+      const toDate =
+        typeof request.query.toDate ===
+        "string"
+          ? request.query.toDate
+          : "";
+
+      const {
+        buffer,
+        filename
+      } =
+        await generateInvoicesExcel(
+          fromDate,
+          toDate
+        );
+
+      response.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+
+      response.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`
+      );
+
+      response
+        .status(200)
+        .send(buffer);
+    } catch (error) {
+      next(error);
+    }
+  };
