@@ -794,6 +794,10 @@ button:disabled {
   .sidebar-footer {
     display: block;
   }
+
+  .user-profile-content {
+    display: none;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1869,7 +1873,6 @@ button:disabled {
 
 /* =========================================================
    SCHOOLAY — GLOBAL MOBILE RESPONSIVE STYLES
-   Add this entire section at the bottom of index.css
    ========================================================= */
 
 /* Prevent page-wide horizontal overflow */
@@ -4987,6 +4990,720 @@ textarea {
   .invoice-export-toolbar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .invoice-export-field input {
+    width: 100%;
+  }
+
+  .invoice-export-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   MOBILE CARD VIEW - Replaces tables on small screens
+   ========================================================= */
+
+/* Hide table on mobile, show cards */
+.mobile-card-view {
+  display: none;
+}
+
+/* Card styles for mobile */
+.data-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.data-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.data-card-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.data-card-item:last-child {
+  border-bottom: none;
+}
+
+.data-card-item .label {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.data-card-item .value {
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+  max-width: 60%;
+}
+
+.data-card-item .value .status-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+}
+
+.data-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.data-card-actions .invoice-action-button,
+.data-card-actions .table-action-button {
+  flex: 1;
+  min-width: 70px;
+  text-align: center;
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
+.data-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.data-card-header .title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.data-card-header .subtitle {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.data-card-header .badge {
+  font-size: 11px;
+  padding: 3px 10px;
+}
+
+/* Dashboard cards on mobile */
+.dashboard-metric-card {
+  padding: 16px;
+}
+
+.dashboard-metric-card strong {
+  font-size: 24px;
+}
+
+/* School cards */
+.school-card .school-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.school-card .school-code {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Product cards */
+.product-card .product-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.product-card .product-code {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.product-card .size-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.product-card .size-badge {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+/* Invoice cards */
+.invoice-card .invoice-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.invoice-card .invoice-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.invoice-card .student-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.invoice-card .total-amount {
+  font-size: 18px;
+  font-weight: 800;
+  color: #182532;
+}
+
+/* Order tracking cards */
+.tracking-card .invoice-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.tracking-card .student-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tracking-card .quantity-info {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.tracking-card .quantity-info span {
+  font-size: 13px;
+}
+
+.tracking-card .quantity-info strong {
+  font-size: 15px;
+  color: #182532;
+}
+
+/* Camp cards */
+.camp-card .camp-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.camp-card .camp-code {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.camp-card .camp-dates {
+  font-size: 13px;
+  color: #374151;
+}
+
+.camp-card .camp-product-count {
+  font-size: 13px;
+}
+
+/* Student measurement cards */
+.student-card .student-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #182532;
+}
+
+.student-card .student-id {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.student-card .student-photo-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.student-card .recommended-size {
+  font-size: 18px;
+  font-weight: 800;
+  color: #432387;
+}
+
+/* =========================================================
+   RESPONSIVE: Show cards on mobile, hide tables
+   ========================================================= */
+
+@media (max-width: 768px) {
+  /* Hide table on mobile */
+  .table-responsive {
+    display: none !important;
+  }
+
+  /* Show card view on mobile */
+  .mobile-card-view {
+    display: block;
+    padding: 12px;
+  }
+
+  /* Hide table in modals on mobile */
+  .modal-container .table-responsive,
+  .modal-content .table-responsive,
+  .modal-card .table-responsive,
+  .modal .table-responsive {
+    display: none !important;
+  }
+
+  .modal-container .mobile-card-view,
+  .modal-content .mobile-card-view,
+  .modal-card .mobile-card-view,
+  .modal .mobile-card-view {
+    display: block;
+  }
+
+  /* Adjust card spacing */
+  .data-card {
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .data-card-item {
+    padding: 6px 0;
+  }
+
+  .data-card-item .label {
+    font-size: 11px;
+  }
+
+  .data-card-item .value {
+    font-size: 13px;
+  }
+
+  .data-card-actions {
+    gap: 6px;
+  }
+
+  .data-card-actions .invoice-action-button,
+  .data-card-actions .table-action-button {
+    font-size: 10px;
+    padding: 5px 8px;
+    min-width: 60px;
+  }
+
+  /* Summary cards on mobile */
+  .tracking-summary,
+  .report-summary-grid,
+  .production-summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .tracking-summary > div,
+  .report-summary-card,
+  .production-summary-card {
+    padding: 12px;
+  }
+
+  .tracking-summary strong,
+  .report-summary-card strong,
+  .production-summary-card strong {
+    font-size: 20px;
+  }
+
+  /* Dashboard cards on mobile */
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .dashboard-card {
+    padding: 14px;
+  }
+
+  .dashboard-card strong {
+    font-size: 20px;
+  }
+
+  .dashboard-metric-card strong {
+    font-size: 20px;
+  }
+
+  .dashboard-report-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .data-card {
+    padding: 12px;
+  }
+
+  .data-card-item {
+    padding: 5px 0;
+  }
+
+  .data-card-item .label {
+    font-size: 10px;
+  }
+
+  .data-card-item .value {
+    font-size: 12px;
+    max-width: 55%;
+  }
+
+  .data-card-header .title {
+    font-size: 14px;
+  }
+
+  .data-card-actions {
+    flex-direction: column;
+  }
+
+  .data-card-actions .invoice-action-button,
+  .data-card-actions .table-action-button {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .tracking-summary,
+  .report-summary-grid,
+  .production-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-summary > div,
+  .report-summary-card,
+  .production-summary-card {
+    padding: 10px;
+  }
+
+  .tracking-summary strong,
+  .report-summary-card strong,
+  .production-summary-card strong {
+    font-size: 18px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .dashboard-card {
+    padding: 12px;
+  }
+
+  .dashboard-card strong {
+    font-size: 18px;
+  }
+
+  .dashboard-metric-card strong {
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   FIX: Table headers and pagination on tablet
+   ========================================================= */
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 700px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   FIX: Pagination on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .pagination-section {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .pagination-section p {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .pagination-buttons {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .pagination-buttons button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .pagination-buttons span {
+    font-size: 12px;
+    text-align: center;
+    align-self: center;
+  }
+}
+
+/* =========================================================
+   FIX: Filter section on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .filter-section .search-group {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .filter-section .search-group input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filter-section .search-group button {
+    width: 100%;
+  }
+
+  .filter-section select,
+  .filter-section input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filter-section .text-button {
+    align-self: center;
+  }
+
+  /* Invoice filters */
+  .invoice-filters {
+    padding: 12px;
+  }
+
+  .invoice-filters .search-row {
+    flex-direction: column;
+  }
+
+  .invoice-filters .search-row .search-input-wrapper {
+    width: 100%;
+  }
+
+  .invoice-filters .search-row .search-button {
+    width: 100%;
+  }
+
+  .invoice-filters .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .invoice-filters .filter-group {
+    min-width: 100%;
+  }
+
+  .invoice-filters .clear-filter-group {
+    margin-left: 0;
+  }
+
+  .invoice-filters .clear-filter-group button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   FIX: Modal on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .modal-container {
+    width: calc(100% - 16px);
+    max-height: calc(100vh - 32px);
+    margin: 8px;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 17px;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-field-full {
+    grid-column: auto;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .invoice-summary {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* =========================================================
+   FIX: Card view for empty states
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 30px 16px;
+  }
+
+  .empty-state h3 {
+    font-size: 16px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   FIX: Buttons on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .primary-button,
+  .secondary-button,
+  .danger-button {
+    padding: 10px 16px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .page-heading-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .page-heading-actions button {
+    width: 100%;
+  }
+
+  .page-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-heading h1 {
+    font-size: 22px;
+  }
+
+  .page-heading p {
+    font-size: 13px;
+  }
+
+  .variant-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .variant-heading button {
+    width: 100%;
+  }
+
+  .invoice-actions {
+    flex-direction: column;
+    align-items: stretch;
+    min-width: auto;
+  }
+
+  .invoice-actions button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   FIX: Production and Report filters on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .production-filter-form,
+  .report-filter-form {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .production-filter-actions,
+  .report-filter-actions {
+    flex-direction: column;
+  }
+
+  .production-filter-actions button,
+  .report-filter-actions button {
+    width: 100%;
+  }
+
+  .production-tabs {
+    overflow-x: auto;
+    padding: 4px 0;
+  }
+
+  .production-tab {
+    padding: 8px 14px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================================
+   FIX: Export toolbar on mobile
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .invoice-export-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .invoice-export-field {
+    width: 100%;
   }
 
   .invoice-export-field input {

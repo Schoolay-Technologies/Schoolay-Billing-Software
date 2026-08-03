@@ -1860,6 +1860,7 @@ export default function StudentMeasurementsPage() {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table student-measurement-table">
                 <thead>
@@ -2064,6 +2065,117 @@ export default function StudentMeasurementsPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {records.map((record) => (
+                <div className="data-card student-card" key={record._id}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="student-name">{record.studentName}</div>
+                      <div className="student-id">ID: {record.studentId}</div>
+                    </div>
+                    <span
+                      className={`badge status-badge ${getStatusClass(
+                        record.status
+                      )}`}
+                    >
+                      {formatLabel(record.status)}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Photo</span>
+                    <span className="value">
+                      {record.photo?.url ? (
+                        <img
+                          src={record.photo.url}
+                          alt={record.studentName}
+                          className="student-photo-thumbnail"
+                        />
+                      ) : (
+                        "No Photo"
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">School</span>
+                    <span className="value">{record.schoolName}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Class</span>
+                    <span className="value">
+                      {record.className}
+                      {record.section ? ` - ${record.section}` : ""}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Gender</span>
+                    <span className="value">{formatLabel(record.gender)}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Academic Year</span>
+                    <span className="value">{record.academicYear}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Measurement Date</span>
+                    <span className="value">{formatDate(record.measurementDate)}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Recommended Size</span>
+                    <span className="value">
+                      <span className="recommended-size">
+                        {record.recommendedSize || "—"}
+                      </span>
+                      {record.recommendationScore > 0 && (
+                        <div className="recommendation-small-score">
+                          {record.recommendationScore}% match
+                        </div>
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Uniform Items</span>
+                    <span className="value">
+                      <strong>{record.items.length}</strong> items
+                    </span>
+                  </div>
+
+                  <div className="data-card-actions">
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => void openViewModal(record._id)}
+                    >
+                      View
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => void openEditModal(record._id)}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button invoice-delete-button"
+                      onClick={() => openDeleteModal(record)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="pagination-section">

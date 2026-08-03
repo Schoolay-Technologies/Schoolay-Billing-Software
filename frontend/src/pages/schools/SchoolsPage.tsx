@@ -325,6 +325,7 @@ export default function SchoolsPage() {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -403,6 +404,64 @@ export default function SchoolsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {schools.map((school) => (
+                <div className="data-card school-card" key={school._id}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="school-name">{school.schoolName}</div>
+                      <div className="school-code">{school.schoolCode}</div>
+                    </div>
+                    <span
+                      className={`badge status-badge ${
+                        school.status === "ACTIVE"
+                          ? "status-active"
+                          : "status-inactive"
+                      }`}
+                    >
+                      {school.status}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Contact Person</span>
+                    <span className="value">{school.contactPerson || "—"}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Contact Number</span>
+                    <span className="value">{school.contactNumber || "—"}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Email</span>
+                    <span className="value">{school.email || "—"}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">City</span>
+                    <span className="value">{school.address?.city || "—"}</span>
+                  </div>
+
+                  <div className="data-card-actions">
+                    <button
+                      type="button"
+                      className="table-action-button"
+                      disabled={updatingSchoolId === school._id}
+                      onClick={() => void handleStatusChange(school)}
+                    >
+                      {updatingSchoolId === school._id
+                        ? "Updating..."
+                        : school.status === "ACTIVE"
+                          ? "Deactivate"
+                          : "Activate"}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="pagination-section">

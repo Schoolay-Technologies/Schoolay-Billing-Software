@@ -65,7 +65,7 @@ const initialForm: CreateInvoiceInput = {
   paidAmount: 0,
   invoiceStatus: "COMPLETED",
   placeOfOrder: "SCHOOL_CAMP",
-specializedStoreName: "",
+  specializedStoreName: "",
   items: [
     {
       ...emptyInvoiceItem
@@ -105,7 +105,7 @@ function getErrorMessage(error: unknown): string {
 
     if (data?.errors?.length) {
       return data.errors
-        .map((currentError) => currentError.message)
+        .map((item) => item.message)
         .join(", ");
     }
 
@@ -569,33 +569,33 @@ const [
     try {
       setIsSubmitting(true);
       setNotification(null);
-const payload: CreateInvoiceInput = {
-  schoolId: formData.schoolId,
-  studentName: formData.studentName.trim(),
-  className: formData.className.trim(),
-  section: formData.section.trim(),
-  parentName: formData.parentName.trim(),
-  contactNumber: formData.contactNumber.trim(),
-  email: formData.email.trim(),
+      const payload: CreateInvoiceInput = {
+        schoolId: formData.schoolId,
+        studentName: formData.studentName.trim(),
+        className: formData.className.trim(),
+        section: formData.section.trim(),
+        parentName: formData.parentName.trim(),
+        contactNumber: formData.contactNumber.trim(),
+        email: formData.email.trim(),
 
-  placeOfOrder:
-    formData.placeOfOrder || "SCHOOL_CAMP",
+        placeOfOrder:
+          formData.placeOfOrder || "SCHOOL_CAMP",
 
-  specializedStoreName:
-    formData.placeOfOrder ===
-    "SPECIALIZED_SCHOOL_STORE"
-      ? formData.specializedStoreName.trim()
-      : "",
+        specializedStoreName:
+          formData.placeOfOrder ===
+          "SPECIALIZED_SCHOOL_STORE"
+            ? formData.specializedStoreName.trim()
+            : "",
 
-  paymentMode: formData.paymentMode,
-  paymentReference:
-    formData.paymentReference.trim(),
-  paymentStatus: formData.paymentStatus,
-  paidAmount: formData.paidAmount,
-  invoiceStatus,
-  items: formData.items,
-  remarks: formData.remarks.trim()
-};
+        paymentMode: formData.paymentMode,
+        paymentReference:
+          formData.paymentReference.trim(),
+        paymentStatus: formData.paymentStatus,
+        paidAmount: formData.paidAmount,
+        invoiceStatus,
+        items: formData.items,
+        remarks: formData.remarks.trim()
+      };
 
       if (
         formMode === "EDIT" &&
@@ -704,47 +704,47 @@ const payload: CreateInvoiceInput = {
           : invoice.schoolId._id
       );
 
-     setFormData({
-  schoolId:
-    typeof invoice.schoolId === "string"
-      ? invoice.schoolId
-      : invoice.schoolId._id,
+      setFormData({
+        schoolId:
+          typeof invoice.schoolId === "string"
+            ? invoice.schoolId
+            : invoice.schoolId._id,
 
-  studentName: invoice.studentName,
-  className: invoice.className,
-  section: invoice.section ?? "",
-  parentName: invoice.parentName ?? "",
-  contactNumber: invoice.contactNumber ?? "",
-  email: invoice.email ?? "",
+        studentName: invoice.studentName,
+        className: invoice.className,
+        section: invoice.section ?? "",
+        parentName: invoice.parentName ?? "",
+        contactNumber: invoice.contactNumber ?? "",
+        email: invoice.email ?? "",
 
-  placeOfOrder: invoice.placeOfOrder ?? "SCHOOL_CAMP",
+        placeOfOrder: invoice.placeOfOrder ?? "SCHOOL_CAMP",
 
-  specializedStoreName:
-    invoice.specializedStoreName ?? "",
+        specializedStoreName:
+          invoice.specializedStoreName ?? "",
 
-  paymentMode: invoice.paymentMode,
-  paymentReference: invoice.paymentReference ?? "",
-  paymentStatus: invoice.paymentStatus,
-  paidAmount: invoice.paidAmount,
+        paymentMode: invoice.paymentMode,
+        paymentReference: invoice.paymentReference ?? "",
+        paymentStatus: invoice.paymentStatus,
+        paidAmount: invoice.paidAmount,
 
-  invoiceStatus:
-    invoice.invoiceStatus === "DRAFT"
-      ? "DRAFT"
-      : "COMPLETED",
+        invoiceStatus:
+          invoice.invoiceStatus === "DRAFT"
+            ? "DRAFT"
+            : "COMPLETED",
 
-  items: invoice.items.map((item) => ({
-    productId:
-      typeof item.productId === "string"
-        ? item.productId
-        : item.productId._id,
+        items: invoice.items.map((item) => ({
+          productId:
+            typeof item.productId === "string"
+              ? item.productId
+              : item.productId._id,
 
-    variantId: item.variantId,
+          variantId: item.variantId,
 
-    quantity: item.quantity
-  })),
+          quantity: item.quantity
+        })),
 
-  remarks: invoice.remarks ?? ""
-});
+        remarks: invoice.remarks ?? ""
+      });
 
       setEditingInvoiceId(invoice._id);
       setFormMode("EDIT");
@@ -1429,6 +1429,7 @@ const payload: CreateInvoiceInput = {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -1592,6 +1593,111 @@ const payload: CreateInvoiceInput = {
               </table>
             </div>
 
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {invoices.map((invoice) => (
+                <div className="data-card invoice-card" key={invoice._id}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="invoice-number">{invoice.invoiceNumber}</div>
+                      <div className="invoice-date">
+                        {new Date(invoice.invoiceDate).toLocaleDateString("en-IN")}
+                      </div>
+                    </div>
+                    <span
+                      className={`badge status-badge ${getInvoiceStatusClass(
+                        invoice.invoiceStatus
+                      )}`}
+                    >
+                      {invoice.invoiceStatus}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">School</span>
+                    <span className="value">{invoice.schoolName}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Student</span>
+                    <span className="value student-name">{invoice.studentName}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Class</span>
+                    <span className="value">
+                      {invoice.className}
+                      {invoice.section ? ` - ${invoice.section}` : ""}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Total</span>
+                    <span className="value total-amount">
+                      {formatCurrency(invoice.grandTotal)}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Payment</span>
+                    <span className="value">
+                      <span
+                        className={`status-badge ${getPaymentStatusClass(
+                          invoice.paymentStatus
+                        )}`}
+                      >
+                        {invoice.paymentStatus.replaceAll("_", " ")}
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="data-card-actions">
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => void handleViewInvoice(invoice._id)}
+                    >
+                      View
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      disabled={invoice.invoiceStatus === "CANCELLED"}
+                      onClick={() => void handleEditInvoice(invoice._id)}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => handlePrintInvoice(invoice)}
+                    >
+                      Print
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => handlePdfInvoice(invoice)}
+                    >
+                      PDF
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button invoice-delete-button"
+                      disabled={invoice.invoiceStatus === "CANCELLED"}
+                      onClick={() => openCancellationModal(invoice)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="pagination-section">
               <p>
                 Showing {invoices.length} of{" "}
@@ -1691,78 +1797,78 @@ const payload: CreateInvoiceInput = {
                     ))}
                 </select>
               </div>
-<div className="form-field">
-  <label htmlFor="placeOfOrder">
-    Place of Order <span>*</span>
-  </label>
+              <div className="form-field">
+                <label htmlFor="placeOfOrder">
+                  Place of Order <span>*</span>
+                </label>
 
-  <select
-    id="placeOfOrder"
-    value={formData.placeOfOrder}
-    onChange={(event) => {
-      const selectedPlace =
-        event.target.value as CreateInvoiceInput["placeOfOrder"];
+                <select
+                  id="placeOfOrder"
+                  value={formData.placeOfOrder}
+                  onChange={(event) => {
+                    const selectedPlace =
+                      event.target.value as CreateInvoiceInput["placeOfOrder"];
 
-      updateFormField(
-        "placeOfOrder",
-        selectedPlace
-      );
+                    updateFormField(
+                      "placeOfOrder",
+                      selectedPlace
+                    );
 
-      if (
-        selectedPlace !==
-        "SPECIALIZED_SCHOOL_STORE"
-      ) {
-        updateFormField(
-          "specializedStoreName",
-          ""
-        );
-      }
-    }}
-    required
-  >
-    <option value="SCHOOL_CAMP">
-      School Camp
-    </option>
+                    if (
+                      selectedPlace !==
+                      "SPECIALIZED_SCHOOL_STORE"
+                    ) {
+                      updateFormField(
+                        "specializedStoreName",
+                        ""
+                      );
+                    }
+                  }}
+                  required
+                >
+                  <option value="SCHOOL_CAMP">
+                    School Camp
+                  </option>
 
-    <option value="TIPPASANDRA_STORE">
-      Tippasandra Store
-    </option>
+                  <option value="TIPPASANDRA_STORE">
+                    Tippasandra Store
+                  </option>
 
-    <option value="MANDUR_STORE">
-      Mandur Store
-    </option>
+                  <option value="MANDUR_STORE">
+                    Mandur Store
+                  </option>
 
-    <option value="SARJAPUR_STORE">
-      Sarjapur Store
-    </option>
+                  <option value="SARJAPUR_STORE">
+                    Sarjapur Store
+                  </option>
 
-    <option value="SPECIALIZED_SCHOOL_STORE">
-      Specialized School Store
-    </option>
-  </select>
-</div>
+                  <option value="SPECIALIZED_SCHOOL_STORE">
+                    Specialized School Store
+                  </option>
+                </select>
+              </div>
 
-{formData.placeOfOrder ===
-  "SPECIALIZED_SCHOOL_STORE" && (
-  <div className="form-field">
-    <label htmlFor="specializedStoreName">
-      Specialized Store Name <span>*</span>
-    </label>
+              {formData.placeOfOrder ===
+                "SPECIALIZED_SCHOOL_STORE" && (
+                <div className="form-field">
+                  <label htmlFor="specializedStoreName">
+                    Specialized Store Name <span>*</span>
+                  </label>
 
-    <input
-      id="specializedStoreName"
-      value={formData.specializedStoreName}
-      onChange={(event) =>
-        updateFormField(
-          "specializedStoreName",
-          event.target.value
-        )
-      }
-      placeholder="Enter school store name"
-      required
-    />
-  </div>
-)}
+                  <input
+                    id="specializedStoreName"
+                    value={formData.specializedStoreName}
+                    onChange={(event) =>
+                      updateFormField(
+                        "specializedStoreName",
+                        event.target.value
+                      )
+                    }
+                    placeholder="Enter school store name"
+                    required
+                  />
+                </div>
+              )}
               
 
               <div className="form-field">

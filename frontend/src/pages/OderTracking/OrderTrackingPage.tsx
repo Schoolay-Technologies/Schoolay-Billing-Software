@@ -823,6 +823,7 @@ export default function OrderTrackingPage() {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -959,6 +960,91 @@ export default function OrderTrackingPage() {
                   })}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {orders.map((order) => {
+                const fulfilmentStatus = getSafeFulfilmentStatus(order);
+                return (
+                  <div className="data-card tracking-card" key={order._id}>
+                    <div className="data-card-header">
+                      <div>
+                        <div className="invoice-number">{order.invoiceNumber}</div>
+                        <div className="subtitle">
+                          {new Date(order.invoiceDate).toLocaleDateString("en-IN")}
+                        </div>
+                      </div>
+                      <span
+                        className={`badge status-badge ${getStatusClass(
+                          fulfilmentStatus
+                        )}`}
+                      >
+                        {formatLabel(fulfilmentStatus)}
+                      </span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Student</span>
+                      <span className="value student-name">{order.studentName}</span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Class</span>
+                      <span className="value">
+                        {order.className}
+                        {order.section ? ` - ${order.section}` : ""}
+                      </span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">School</span>
+                      <span className="value">{order.schoolName}</span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Order Place</span>
+                      <span className="value">
+                        {formatLabel(order.placeOfOrder ?? "SCHOOL_CAMP")}
+                        {order.placeOfOrder === "SPECIALIZED_SCHOOL_STORE" &&
+                          order.specializedStoreName
+                          ? ` - ${order.specializedStoreName}`
+                          : ""}
+                      </span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Quantity</span>
+                      <span className="value">
+                        <div className="quantity-info">
+                          <span>Ordered: <strong>{getTotalOrderedQuantity(order)}</strong></span>
+                          <span>Delivered: <strong>{getTotalDeliveredQuantity(order)}</strong></span>
+                          <span>Pending: <strong>{getTotalPendingQuantity(order)}</strong></span>
+                        </div>
+                      </span>
+                    </div>
+
+                    <div className="data-card-actions">
+                      <button
+                        type="button"
+                        className="invoice-action-button"
+                        disabled={fulfilmentStatus === "COMPLETELY_DELIVERED"}
+                        onClick={() => void openTrackingModal(order._id)}
+                      >
+                        Update
+                      </button>
+
+                      <button
+                        type="button"
+                        className="invoice-action-button"
+                        onClick={() => void openHistoryModal(order._id)}
+                      >
+                        History
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="pagination-section">

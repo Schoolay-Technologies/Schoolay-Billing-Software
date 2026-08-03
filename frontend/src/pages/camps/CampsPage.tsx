@@ -1344,6 +1344,7 @@ export default function CampsPage() {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table camp-table">
                 <thead>
@@ -1558,6 +1559,111 @@ export default function CampsPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {camps.map((camp) => (
+                <div className="data-card camp-card" key={camp._id}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="camp-name">{camp.campName}</div>
+                      <div className="camp-code">{camp.campCode}</div>
+                    </div>
+                    <span
+                      className={`badge status-badge ${getStatusClass(
+                        camp.status
+                      )}`}
+                    >
+                      {formatStatus(camp.status)}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">School</span>
+                    <span className="value">{camp.schoolName}</span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Dates</span>
+                    <span className="value camp-dates">
+                      {formatDate(camp.startDate)} to {formatDate(camp.endDate)}
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Products</span>
+                    <span className="value camp-product-count">
+                      <strong>{camp.products.length}</strong> products
+                    </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Orders</span>
+                    <span className="value">
+                      <strong>{camp.orderCount}</strong> orders
+                    </span>
+                  </div>
+
+                  <div className="data-card-actions">
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => void openViewModal(camp._id)}
+                    >
+                      View
+                    </button>
+
+                    <button
+                      type="button"
+                      className="invoice-action-button"
+                      onClick={() => void openQrModal(camp)}
+                    >
+                      QR
+                    </button>
+
+                    {camp.status !== "CLOSED" && (
+                      <button
+                        type="button"
+                        className="invoice-action-button"
+                        onClick={() => void openEditModal(camp._id)}
+                      >
+                        Edit
+                      </button>
+                    )}
+
+                    {camp.status === "DRAFT" && (
+                      <button
+                        type="button"
+                        className="invoice-action-button"
+                        onClick={() => openStatusModal(camp, "ACTIVE")}
+                      >
+                        Activate
+                      </button>
+                    )}
+
+                    {camp.status === "ACTIVE" && (
+                      <button
+                        type="button"
+                        className="invoice-action-button"
+                        onClick={() => openStatusModal(camp, "CLOSED")}
+                      >
+                        Close
+                      </button>
+                    )}
+
+                    {camp.status === "DRAFT" && camp.orderCount === 0 && (
+                      <button
+                        type="button"
+                        className="invoice-action-button invoice-delete-button"
+                        onClick={() => openDeleteModal(camp)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="pagination-section">

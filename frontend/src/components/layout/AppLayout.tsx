@@ -94,6 +94,7 @@ export default function AppLayout() {
 
   return (
     <div className="app-shell">
+      {/* Backdrop for mobile */}
       <button
         type="button"
         className={`sidebar-backdrop ${
@@ -107,6 +108,7 @@ export default function AppLayout() {
         }
       />
 
+      {/* Sidebar */}
       <aside
         className={`sidebar ${
           isSidebarOpen
@@ -131,6 +133,7 @@ export default function AppLayout() {
             </div>
           </div>
 
+          {/* Close button for mobile */}
           <button
             type="button"
             className="sidebar-close-button"
@@ -180,9 +183,11 @@ export default function AppLayout() {
         </div>
       </aside>
 
+      {/* Main content area */}
       <div className="main-area">
         <header className="top-header">
           <div className="top-header-left">
+            {/* Hamburger button */}
             <button
               type="button"
               className={`hamburger-button ${

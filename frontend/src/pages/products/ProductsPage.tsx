@@ -568,6 +568,7 @@ export default function ProductsPage() {
           </div>
         ) : (
           <>
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -721,6 +722,99 @@ export default function ProductsPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {products.map((product) => {
+                const sellingPrices =
+                  product.variants.map(
+                    (variant) =>
+                      variant.sellingPrice
+                  );
+
+                const minimumPrice =
+                  Math.min(
+                    ...sellingPrices
+                  );
+
+                const maximumPrice =
+                  Math.max(
+                    ...sellingPrices
+                  );
+
+                return (
+                  <div className="data-card product-card" key={product._id}>
+                    <div className="data-card-header">
+                      <div>
+                        <div className="product-name">{product.productName}</div>
+                        <div className="product-code">{product.productCode}</div>
+                      </div>
+                      <span
+                        className={`badge status-badge ${
+                          product.status === "ACTIVE"
+                            ? "status-active"
+                            : "status-inactive"
+                        }`}
+                      >
+                        {product.status}
+                      </span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">School</span>
+                      <span className="value">{product.schoolId.schoolName}</span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Gender</span>
+                      <span className="value">{product.gender}</span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Sizes</span>
+                      <span className="value">
+                        <div className="size-list">
+                          {product.variants.map(
+                            (variant) => (
+                              <span
+                                key={variant._id ?? variant.sku}
+                                className="size-badge"
+                              >
+                                {variant.size}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </span>
+                    </div>
+
+                    <div className="data-card-item">
+                      <span className="label">Price Range</span>
+                      <span className="value">
+                        {minimumPrice === maximumPrice
+                          ? formatCurrency(minimumPrice)
+                          : `${formatCurrency(minimumPrice)} – ${formatCurrency(maximumPrice)}`}
+                      </span>
+                    </div>
+
+                    <div className="data-card-actions">
+                      <button
+                        type="button"
+                        className="table-action-button"
+                        disabled={updatingProductId === product._id}
+                        onClick={() => void handleStatusChange(product)}
+                      >
+                        {updatingProductId === product._id
+                          ? "Updating..."
+                          : product.status === "ACTIVE"
+                            ? "Deactivate"
+                            : "Activate"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="pagination-section">

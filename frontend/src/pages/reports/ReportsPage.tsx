@@ -1370,6 +1370,7 @@ export default function ReportsPage() {
               </div>
             </div>
 
+            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table report-table">
                 <thead>
@@ -1416,6 +1417,31 @@ export default function ReportsPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {report.data.map((row, rowIndex) => (
+                <div className="data-card" key={rowIndex}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="title">Entry #{rowIndex + 1}</div>
+                      <div className="subtitle">
+                        {selectedSchool?.schoolName || "School"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {displayedColumns.map((column) => (
+                    <div className="data-card-item" key={column.key}>
+                      <span className="label">{column.header}</span>
+                      <span className="value">
+                        {formatCellValue(column.key, row[column.key])}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </>
         )}

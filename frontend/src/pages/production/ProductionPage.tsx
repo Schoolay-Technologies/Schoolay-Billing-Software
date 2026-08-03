@@ -1418,130 +1418,177 @@ export default function ProductionPage() {
               </p>
             </div>
           ) : (
-            <div className="table-responsive">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>S.No.</th>
-                    <th>
-                      Date / Period
-                    </th>
-                    <th>School</th>
-                    <th>Product</th>
-                    <th>Gender</th>
-                    <th>Size</th>
-                    <th>Class</th>
-                    <th>
-                      Total Quantity
-                    </th>
-                  </tr>
-                </thead>
+            <>
+              {/* Desktop Table View */}
+              <div className="table-responsive">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>S.No.</th>
+                      <th>
+                        Date / Period
+                      </th>
+                      <th>School</th>
+                      <th>Product</th>
+                      <th>Gender</th>
+                      <th>Size</th>
+                      <th>Class</th>
+                      <th>
+                        Total Quantity
+                      </th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {productionRows.map(
-                    (row, index) => (
-                      <tr
-                        key={[
-                          row.period,
-                          row.schoolId,
-                          row.productId,
-                          row.gender,
-                          row.size,
-                          row.className
-                        ].join("-")}
+                  <tbody>
+                    {productionRows.map(
+                      (row, index) => (
+                        <tr
+                          key={[
+                            row.period,
+                            row.schoolId,
+                            row.productId,
+                            row.gender,
+                            row.size,
+                            row.className
+                          ].join("-")}
+                        >
+                          <td>
+                            {index + 1}
+                          </td>
+
+                          <td>
+                            {getDisplayPeriod(
+                              row,
+                              appliedFilters.groupBy
+                            )}
+                          </td>
+
+                          <td>
+                            <div className="school-name-cell">
+                              <strong>
+                                {
+                                  row.schoolCode
+                                }
+                              </strong>
+
+                              <span>
+                                {
+                                  row.schoolName
+                                }
+                              </span>
+                            </div>
+                          </td>
+
+                          <td>
+                            <div className="school-name-cell">
+                              <strong>
+                                {
+                                  row.productName
+                                }
+                              </strong>
+
+                              <span>
+                                {
+                                  row.productCode
+                                }
+                              </span>
+                            </div>
+                          </td>
+
+                          <td>
+                            {formatLabel(
+                              row.gender
+                            )}
+                          </td>
+
+                          <td>
+                            <strong>
+                              {row.size}
+                            </strong>
+                          </td>
+
+                          <td>
+                            {row.className ||
+                              "—"}
+                          </td>
+
+                          <td>
+                            <strong>
+                              {
+                                row.totalQuantity
+                              }
+                            </strong>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+
+                  <tfoot>
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="production-total-label"
                       >
-                        <td>
-                          {index + 1}
-                        </td>
+                        Grand Total
+                      </td>
 
-                        <td>
-                          {getDisplayPeriod(
-                            row,
-                            appliedFilters.groupBy
-                          )}
-                        </td>
+                      <td>
+                        <strong>
+                          {
+                            summary.totalQuantity
+                          }
+                        </strong>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
 
-                        <td>
-                          <div className="school-name-cell">
-                            <strong>
-                              {
-                                row.schoolCode
-                              }
-                            </strong>
+              {/* Mobile Card View */}
+              <div className="mobile-card-view">
+                {productionRows.map((row, index) => (
+                  <div className="data-card" key={index}>
+                    <div className="data-card-header">
+                      <div>
+                        <div className="title">
+                          {getDisplayPeriod(row, appliedFilters.groupBy)}
+                        </div>
+                        <div className="subtitle">#{index + 1}</div>
+                      </div>
+                      <span className="badge status-badge status-active">
+                        {row.totalQuantity} qty
+                      </span>
+                    </div>
 
-                            <span>
-                              {
-                                row.schoolName
-                              }
-                            </span>
-                          </div>
-                        </td>
+                    <div className="data-card-item">
+                      <span className="label">School</span>
+                      <span className="value">{row.schoolName}</span>
+                    </div>
 
-                        <td>
-                          <div className="school-name-cell">
-                            <strong>
-                              {
-                                row.productName
-                              }
-                            </strong>
+                    <div className="data-card-item">
+                      <span className="label">Product</span>
+                      <span className="value">{row.productName}</span>
+                    </div>
 
-                            <span>
-                              {
-                                row.productCode
-                              }
-                            </span>
-                          </div>
-                        </td>
+                    <div className="data-card-item">
+                      <span className="label">Gender</span>
+                      <span className="value">{formatLabel(row.gender)}</span>
+                    </div>
 
-                        <td>
-                          {formatLabel(
-                            row.gender
-                          )}
-                        </td>
+                    <div className="data-card-item">
+                      <span className="label">Size</span>
+                      <span className="value"><strong>{row.size}</strong></span>
+                    </div>
 
-                        <td>
-                          <strong>
-                            {row.size}
-                          </strong>
-                        </td>
-
-                        <td>
-                          {row.className ||
-                            "—"}
-                        </td>
-
-                        <td>
-                          <strong>
-                            {
-                              row.totalQuantity
-                            }
-                          </strong>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-
-                <tfoot>
-                  <tr>
-                    <td
-                      colSpan={7}
-                      className="production-total-label"
-                    >
-                      Grand Total
-                    </td>
-
-                    <td>
-                      <strong>
-                        {
-                          summary.totalQuantity
-                        }
-                      </strong>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+                    <div className="data-card-item">
+                      <span className="label">Class</span>
+                      <span className="value">{row.className || "—"}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )
         ) : matrixRows.length ===
           0 ? (
@@ -1556,84 +1603,122 @@ export default function ProductionPage() {
             </p>
           </div>
         ) : (
-          <div className="table-responsive production-matrix-wrapper">
-            <table className="data-table production-matrix-table">
-              <thead>
-                <tr>
-                  <th>S.No.</th>
-                  <th>Product</th>
-                  <th>Code</th>
-                  <th>Gender</th>
+          <>
+            {/* Desktop Table View */}
+            <div className="table-responsive production-matrix-wrapper">
+              <table className="data-table production-matrix-table">
+                <thead>
+                  <tr>
+                    <th>S.No.</th>
+                    <th>Product</th>
+                    <th>Code</th>
+                    <th>Gender</th>
 
-                  {matrixSizes.map(
-                    (size) => (
-                      <th key={size}>
-                        {size}
-                      </th>
+                    {matrixSizes.map(
+                      (size) => (
+                        <th key={size}>
+                          {size}
+                        </th>
+                      )
+                    )}
+
+                    <th>Total</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {matrixRows.map(
+                    (row, index) => (
+                      <tr
+                        key={[
+                          row.productId,
+                          row.gender
+                        ].join("-")}
+                      >
+                        <td>
+                          {index + 1}
+                        </td>
+
+                        <td>
+                          <strong>
+                            {
+                              row.productName
+                            }
+                          </strong>
+                        </td>
+
+                        <td>
+                          {
+                            row.productCode
+                          }
+                        </td>
+
+                        <td>
+                          {formatLabel(
+                            row.gender
+                          )}
+                        </td>
+
+                        {matrixSizes.map(
+                          (size) => (
+                            <td
+                              key={size}
+                              className="production-matrix-number"
+                            >
+                              {row.sizes[
+                                size
+                              ] ?? 0}
+                            </td>
+                          )
+                        )}
+
+                        <td className="production-matrix-total">
+                          <strong>
+                            {row.total}
+                          </strong>
+                        </td>
+                      </tr>
                     )
                   )}
+                </tbody>
+              </table>
+            </div>
 
-                  <th>Total</th>
-                </tr>
-              </thead>
+            {/* Mobile Card View */}
+            <div className="mobile-card-view">
+              {matrixRows.map((row, index) => (
+                <div className="data-card" key={index}>
+                  <div className="data-card-header">
+                    <div>
+                      <div className="title">{row.productName}</div>
+                      <div className="subtitle">{row.productCode}</div>
+                    </div>
+                    <span className="badge status-badge status-active">
+                      Total: {row.total}
+                    </span>
+                  </div>
 
-              <tbody>
-                {matrixRows.map(
-                  (row, index) => (
-                    <tr
-                      key={[
-                        row.productId,
-                        row.gender
-                      ].join("-")}
-                    >
-                      <td>
-                        {index + 1}
-                      </td>
+                  <div className="data-card-item">
+                    <span className="label">Gender</span>
+                    <span className="value">{formatLabel(row.gender)}</span>
+                  </div>
 
-                      <td>
-                        <strong>
-                          {
-                            row.productName
-                          }
-                        </strong>
-                      </td>
-
-                      <td>
-                        {
-                          row.productCode
-                        }
-                      </td>
-
-                      <td>
-                        {formatLabel(
-                          row.gender
-                        )}
-                      </td>
-
-                      {matrixSizes.map(
-                        (size) => (
-                          <td
-                            key={size}
-                            className="production-matrix-number"
-                          >
-                            {row.sizes[
-                              size
-                            ] ?? 0}
-                          </td>
-                        )
-                      )}
-
-                      <td className="production-matrix-total">
-                        <strong>
-                          {row.total}
-                        </strong>
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
+                  <div className="data-card-item">
+                    <span className="label">Sizes</span>
+                    <span className="value">
+                      <div className="size-list">
+                        {matrixSizes.map((size) => (
+                          <span key={size} className="size-badge">
+                            {size}: {row.sizes[size] || 0}
+                          </span>
+                        ))}
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </section>
