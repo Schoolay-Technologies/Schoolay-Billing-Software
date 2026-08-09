@@ -21,6 +21,8 @@ import reportRoutes from "./routes/report.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import studentMeasurementRoutes from "./routes/studentSizeRecord.routes.js";
 import campRoutes from "./routes/camp.routes.js";
+import storeReportRoutes from
+  "./routes/storeReport.routes.js";
 
 const app: Application = express();
 
@@ -202,6 +204,11 @@ app.use(
 app.use(
   "/api/v1/camps",
   campRoutes
+);
+
+app.use(
+  "/api/v1/store-reports",
+  storeReportRoutes
 );
 
 app.use(

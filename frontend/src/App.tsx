@@ -18,6 +18,8 @@ import CampsPage from
 
 import PublicCampOrderPage from
   "./pages/publicCamp/PublicCampOrderPage";
+import StoreReportsPage from
+  "./pages/storeReports/StoreReportsPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,13 @@ const router = createBrowserRouter([
       element:
         <PublicCampOrderPage />
     },
+    {
+  path:
+    "store-reports",
+
+  element:
+    <StoreReportsPage />
+}
       
     ]
   },

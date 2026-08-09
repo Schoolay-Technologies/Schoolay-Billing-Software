@@ -45,7 +45,14 @@ const navigationItems = [
   {
     name: "School Camps",
     path: "/camps"
-  }
+  },
+  {
+  name:
+    "Store Reports",
+
+  path:
+    "/store-reports"
+}
 ];
 
 export default function AppLayout() {
@@ -128,7 +135,7 @@ export default function AppLayout() {
               </h1>
 
               <p>
-                Billing Software
+                ERP System
               </p>
             </div>
           </div>

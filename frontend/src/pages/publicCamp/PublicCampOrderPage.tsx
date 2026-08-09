@@ -1161,42 +1161,88 @@ export default function PublicCampOrderPage() {
                         </div>
 
                         <div className="public-camp-field">
-                          <label>
-                            Quantity{" "}
-                            <span>*</span>
-                          </label>
+  <label>
+    Quantity <span>*</span>
+  </label>
 
-                          <input
-                            type="number"
-                            min="1"
-                            max="10"
-                            step="1"
-                            value={
-                              item.quantity
-                            }
-                            onChange={(event) =>
-                              updateOrderItem(
-                                index,
-                                {
-                                  quantity:
-                                    Math.min(
-                                      10,
-                                      Math.max(
-                                        1,
-                                        Number(
-                                          event
-                                            .target
-                                            .value
-                                        ) ||
-                                          1
-                                      )
-                                    )
-                                }
-                              )
-                            }
-                            required
-                          />
-                        </div>
+  <div className="public-camp-quantity-control">
+    <button
+      type="button"
+      className="public-camp-quantity-button"
+      disabled={item.quantity <= 1}
+      onClick={() =>
+        updateOrderItem(
+          index,
+          {
+            quantity:
+              Math.max(
+                1,
+                item.quantity - 1
+              )
+          }
+        )
+      }
+    >
+      −
+    </button>
+
+    <input
+      type="number"
+      min="1"
+      max="10"
+      step="1"
+      inputMode="numeric"
+      value={item.quantity}
+      onChange={(event) => {
+        const parsedValue =
+          Number(
+            event.target.value
+          );
+
+        updateOrderItem(
+          index,
+          {
+            quantity:
+              Number.isFinite(
+                parsedValue
+              )
+                ? Math.min(
+                    10,
+                    Math.max(
+                      1,
+                      Math.floor(
+                        parsedValue
+                      )
+                    )
+                  )
+                : 1
+          }
+        );
+      }}
+      required
+    />
+
+    <button
+      type="button"
+      className="public-camp-quantity-button"
+      disabled={item.quantity >= 10}
+      onClick={() =>
+        updateOrderItem(
+          index,
+          {
+            quantity:
+              Math.min(
+                10,
+                item.quantity + 1
+              )
+          }
+        )
+      }
+    >
+      +
+    </button>
+  </div>
+</div>
                       </div>
                     </article>
                   );

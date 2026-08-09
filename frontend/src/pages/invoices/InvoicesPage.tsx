@@ -7,7 +7,6 @@ import {
   useState
 } from "react";
 
-
 import {
   cancelInvoice,
   createInvoice,
@@ -74,7 +73,6 @@ const initialForm: CreateInvoiceInput = {
   remarks: ""
 };
 
-
 function createInitialForm(): CreateInvoiceInput {
   return {
     ...initialForm,
@@ -85,7 +83,6 @@ function createInitialForm(): CreateInvoiceInput {
     ]
   };
 }
-
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -161,20 +158,9 @@ export default function InvoicesPage() {
     totalPages: 0
   });
 
-  const [
-  exportFromDate,
-  setExportFromDate
-] = useState("");
-
-const [
-  exportToDate,
-  setExportToDate
-] = useState("");
-
-const [
-  isExportingExcel,
-  setIsExportingExcel
-] = useState(false);
+  const [exportFromDate, setExportFromDate] = useState("");
+  const [exportToDate, setExportToDate] = useState("");
+  const [isExportingExcel, setIsExportingExcel] = useState(false);
 
   const [formData, setFormData] =
     useState<CreateInvoiceInput>(createInitialForm());
@@ -203,8 +189,6 @@ const [
 
   const [paymentStatusFilter, setPaymentStatusFilter] =
     useState<PaymentStatus | "">("");
-
- 
 
   const [isFormModalOpen, setIsFormModalOpen] =
     useState(false);
@@ -861,6 +845,10 @@ const [
       )
       .join("");
 
+    const paymentModeChecked = (mode: string) => {
+      return invoice.paymentMode === mode ? "☑" : "☐";
+    };
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -870,192 +858,459 @@ const [
           <style>
             @page {
               size: A4;
-              margin: 12mm;
+              margin: 8mm 10mm;
+            }
+
+            * {
+              box-sizing: border-box;
             }
 
             body {
-              font-family: Arial, sans-serif;
-              color: #111827;
+              font-family: 'Segoe UI', Arial, sans-serif;
+              color: #1a1a2e;
               margin: 0;
-            }
-
-            .invoice {
-              width: 100%;
-            }
-
-            .header {
-              display: flex;
-              justify-content: space-between;
-              border-bottom: 2px solid #111827;
-              padding-bottom: 14px;
-            }
-
-            h1, h2, p {
-              margin: 0;
-            }
-
-            .company h1 {
-              font-size: 22px;
-            }
-
-            .company p {
-              margin-top: 5px;
+              padding: 0;
+              background: #ffffff;
               font-size: 12px;
             }
 
-            .invoice-meta {
+            .invoice-container {
+              max-width: 100%;
+              padding: 0;
+            }
+
+            /* Header Section */
+            .header-section {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              border-bottom: 3px solid #1a1a2e;
+              padding-bottom: 16px;
+              margin-bottom: 16px;
+            }
+
+            .company-details {
+              flex: 1;
+            }
+
+            .company-name {
+              font-size: 20px;
+              font-weight: 800;
+              color: #1a1a2e;
+              letter-spacing: -0.5px;
+              margin: 0 0 4px 0;
+            }
+
+            .company-address {
+              font-size: 11px;
+              color: #4a4a6a;
+              line-height: 1.5;
+              margin: 0;
+            }
+
+            .company-gst {
+              font-size: 10.5px;
+              color: #4a4a6a;
+              margin: 3px 0 0 0;
+              font-weight: 500;
+            }
+
+            .company-gst span {
+              background: #f0f0f5;
+              padding: 1px 8px;
+              border-radius: 3px;
+            }
+
+            .invoice-title {
               text-align: right;
+              min-width: 180px;
             }
 
-            .invoice-meta h2 {
-              margin-bottom: 6px;
+            .invoice-title h2 {
+              font-size: 24px;
+              font-weight: 800;
+              color: #1a1a2e;
+              margin: 0 0 4px 0;
+              letter-spacing: 1px;
             }
 
-            .details {
+            .invoice-number {
+              font-size: 13px;
+              font-weight: 600;
+              color: #2d2d5e;
+              background: #f0f0f5;
+              padding: 2px 12px;
+              border-radius: 4px;
+              display: inline-block;
+            }
+
+            .invoice-date {
+              font-size: 11px;
+              color: #4a4a6a;
+              margin-top: 3px;
+            }
+
+            .cancelled-stamp {
+              color: #b91c1c;
+              border: 3px solid #b91c1c;
+              padding: 6px 16px;
+              font-weight: 800;
+              font-size: 18px;
+              transform: rotate(-10deg);
+              display: inline-block;
+              margin-top: 6px;
+              border-radius: 4px;
+              letter-spacing: 2px;
+            }
+
+            /* Details Grid */
+            .details-grid {
               display: grid;
               grid-template-columns: 1fr 1fr;
+              gap: 14px;
+              margin-bottom: 16px;
+            }
+
+            .detail-box {
+              border: 1px solid #e0e0ea;
+              border-radius: 6px;
+              padding: 10px 14px;
+              background: #fafafe;
+            }
+
+            .detail-box .label {
+              font-size: 9.5px;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              color: #6b6b8a;
+              font-weight: 600;
+              display: block;
+              margin-bottom: 3px;
+            }
+
+            .detail-box .value {
+              font-size: 13px;
+              font-weight: 600;
+              color: #1a1a2e;
+            }
+
+            .detail-box .value-small {
+              font-size: 11px;
+              font-weight: 400;
+              color: #2d2d5e;
+            }
+
+            /* Payment Mode */
+            .payment-mode-section {
+              border: 1px solid #e0e0ea;
+              border-radius: 6px;
+              padding: 10px 14px;
+              background: #fafafe;
+              margin-bottom: 16px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              flex-wrap: wrap;
+            }
+
+            .payment-mode-label {
+              font-size: 11px;
+              font-weight: 600;
+              color: #1a1a2e;
+            }
+
+            .payment-mode-options {
+              display: flex;
               gap: 20px;
-              margin-top: 20px;
-            }
-
-            .box {
-              border: 1px solid #d1d5db;
-              padding: 12px;
-            }
-
-            .box p {
-              margin: 5px 0;
               font-size: 13px;
             }
 
-            table {
+            .payment-mode-options span {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            }
+
+            .payment-mode-options .checked {
+              color: #1a8a4a;
+              font-weight: 700;
+            }
+
+            /* Bank Details */
+            .bank-details {
+              border: 1px solid #e0e0ea;
+              border-radius: 6px;
+              padding: 10px 14px;
+              background: #f8f8ff;
+              margin-bottom: 16px;
+              font-size: 10.5px;
+              color: #2d2d5e;
+              line-height: 1.6;
+            }
+
+            .bank-details strong {
+              color: #1a1a2e;
+            }
+
+            /* Table */
+            .items-table {
               width: 100%;
               border-collapse: collapse;
-              margin-top: 20px;
+              margin-bottom: 16px;
+              font-size: 11px;
             }
 
-            th,
-            td {
-              border: 1px solid #d1d5db;
-              padding: 8px;
-              font-size: 12px;
+            .items-table th {
+              background: #1a1a2e;
+              color: #ffffff;
+              padding: 8px 10px;
               text-align: left;
+              font-weight: 600;
+              font-size: 10px;
+              text-transform: uppercase;
+              letter-spacing: 0.3px;
             }
 
-            th {
-              background: #f3f4f6;
+            .items-table td {
+              border-bottom: 1px solid #e8e8f0;
+              padding: 8px 10px;
+              color: #2d2d5e;
             }
 
-            .summary {
-              width: 340px;
-              margin-left: auto;
-              margin-top: 18px;
+            .items-table tr:last-child td {
+              border-bottom: 2px solid #1a1a2e;
             }
 
-            .summary div {
+            .items-table .text-right {
+              text-align: right;
+            }
+
+            .items-table .total-cell {
+              font-weight: 700;
+              color: #1a1a2e;
+            }
+
+            /* Summary */
+            .summary-section {
+              display: flex;
+              justify-content: flex-end;
+              margin-bottom: 16px;
+            }
+
+            .summary-box {
+              width: 280px;
+              border: 1px solid #e0e0ea;
+              border-radius: 6px;
+              padding: 10px 14px;
+              background: #fafafe;
+            }
+
+            .summary-row {
               display: flex;
               justify-content: space-between;
-              padding: 6px 0;
+              padding: 4px 0;
+              font-size: 11px;
+              color: #4a4a6a;
             }
 
-            .grand-total {
-              border-top: 2px solid #111827;
-              font-size: 16px;
-              font-weight: bold;
+            .summary-row .amount {
+              font-weight: 600;
+              color: #1a1a2e;
             }
 
-            .cancelled {
+            .summary-divider {
+              border-top: 1px solid #e0e0ea;
+              margin: 6px 0;
+            }
+
+            .summary-grand {
+              display: flex;
+              justify-content: space-between;
+              padding: 6px 0 0 0;
+              font-size: 15px;
+              font-weight: 800;
+              color: #1a1a2e;
+              border-top: 2px solid #1a1a2e;
+              margin-top: 4px;
+            }
+
+            /* Terms */
+            .terms-section {
+              border-top: 2px solid #1a1a2e;
+              padding-top: 12px;
+              margin-top: 4px;
+            }
+
+            .terms-title {
+              font-size: 11px;
+              font-weight: 700;
+              color: #1a1a2e;
+              margin: 0 0 6px 0;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+
+            .terms-list {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 2px 20px;
+              margin: 0;
+              padding: 0;
+              list-style: none;
+              font-size: 9.5px;
+              color: #4a4a6a;
+              line-height: 1.6;
+            }
+
+            .terms-list li::before {
+              content: "• ";
+              color: #1a1a2e;
+              font-weight: 700;
+            }
+
+            .terms-list .highlight {
               color: #b91c1c;
-              border: 3px solid #b91c1c;
-              padding: 8px 14px;
-              font-weight: bold;
-              transform: rotate(-8deg);
-              display: inline-block;
-              margin-top: 10px;
+              font-weight: 600;
+            }
+
+            /* Footer */
+            .footer-section {
+              margin-top: 12px;
+              text-align: center;
+              font-size: 9px;
+              color: #8a8aaa;
+              border-top: 1px solid #e8e8f0;
+              padding-top: 10px;
+            }
+
+            /* Responsive */
+            @media print {
+              .no-print {
+                display: none;
+              }
+            }
+
+            @media (max-width: 600px) {
+              .details-grid {
+                grid-template-columns: 1fr;
+              }
+              .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+              }
+              .invoice-title {
+                text-align: left;
+                margin-top: 8px;
+                width: 100%;
+              }
+              .payment-mode-options {
+                flex-wrap: wrap;
+                gap: 10px;
+              }
+              .terms-list {
+                grid-template-columns: 1fr;
+              }
+              .summary-box {
+                width: 100%;
+              }
             }
           </style>
         </head>
 
         <body>
-          <div class="invoice">
-            <div class="header">
-              <div class="company">
-                <h1>SCHOOLAY TECHNOLOGIES PVT. LTD.</h1>
-                <p>543/1, 1st Main Road, Ramaiah Layout</p>
-                <p>Dodda Banaswadi, Bengaluru</p>
-                <p>Mobile: 8088438290</p>
-                <p>Email: customersupport@schoolay.com</p>
+          <div class="invoice-container">
+            <!-- Header -->
+            <div class="header-section">
+              <div class="company-details">
+                <h1 class="company-name">SCHOOLAY TECHNOLOGIES PRIVATE LIMITED</h1>
+                <p class="company-address">
+                  546/1, BRR Layout, Dodda Banaswadi, Bangalore - 560043
+                </p>
+                <p class="company-gst">
+                  <span>GSTIN: 29AAZCS4585N1ZY</span> &nbsp;|&nbsp; State: Karnataka (29)
+                </p>
+                <p class="company-gst" style="font-weight:400; margin-top:2px;">
+                  📧 kiran@schoolay.com &nbsp;|&nbsp; 📞 +91 8088438290
+                </p>
               </div>
 
-              <div class="invoice-meta">
+              <div class="invoice-title">
                 <h2>INVOICE</h2>
-                <p><strong>${invoice.invoiceNumber}</strong></p>
-                <p>${new Date(
-                  invoice.invoiceDate
-                ).toLocaleDateString("en-IN")}</p>
-
+                <div class="invoice-number">${invoice.invoiceNumber}</div>
+                <div class="invoice-date">
+                  ${new Date(invoice.invoiceDate).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                  })}
+                </div>
                 ${
-                  invoice.invoiceStatus ===
-                  "CANCELLED"
-                    ? `<div class="cancelled">CANCELLED</div>`
+                  invoice.invoiceStatus === "CANCELLED"
+                    ? `<div class="cancelled-stamp">CANCELLED</div>`
                     : ""
                 }
               </div>
             </div>
 
-            <div class="details">
-              <div class="box">
-                <p><strong>Student:</strong> ${
-                  invoice.studentName
-                }</p>
-
-                <p><strong>Class:</strong> ${
-                  invoice.className
-                }${
-                  invoice.section
-                    ? ` - ${invoice.section}`
-                    : ""
-                }</p>
-
-                <p><strong>Parent:</strong> ${
-                  invoice.parentName || "—"
-                }</p>
-
-                <p><strong>Contact:</strong> ${
-                  invoice.contactNumber || "—"
-                }</p>
+            <!-- Details -->
+            <div class="details-grid">
+              <div class="detail-box">
+                <span class="label">Student Information</span>
+                <div class="value">${invoice.studentName}</div>
+                <div class="value-small">
+                  Class: ${invoice.className}${invoice.section ? ` - ${invoice.section}` : ""}
+                </div>
+                <div class="value-small">
+                  Parent: ${invoice.parentName || "—"} &nbsp;|&nbsp; ${invoice.contactNumber || "—"}
+                </div>
               </div>
 
-              <div class="box">
-                <p><strong>School:</strong> ${
-                  invoice.schoolName
-                }</p>
-
-                <p><strong>School Code:</strong> ${
-                  invoice.schoolCode
-                }</p>
-
-                <p><strong>Payment Mode:</strong> ${
-                  invoice.paymentMode
-                }</p>
-
-                <p><strong>Payment Status:</strong> ${
-                  invoice.paymentStatus
-                }</p>
+              <div class="detail-box">
+                <span class="label">School Information</span>
+                <div class="value">${invoice.schoolName}</div>
+                <div class="value-small">Code: ${invoice.schoolCode}</div>
+                <div class="value-small">
+                  Payment: ${invoice.paymentStatus.replaceAll("_", " ")}
+                </div>
               </div>
             </div>
 
-            <table>
+            <!-- Payment Mode -->
+            <div class="payment-mode-section">
+              <span class="payment-mode-label">Mode of Payment:</span>
+              <div class="payment-mode-options">
+                <span class="${invoice.paymentMode === "CARD" ? "checked" : ""}">
+                  ${paymentModeChecked("CARD")} Card
+                </span>
+                <span class="${invoice.paymentMode === "CASH" ? "checked" : ""}">
+                  ${paymentModeChecked("CASH")} Cash
+                </span>
+                <span class="${invoice.paymentMode === "ONLINE" ? "checked" : ""}">
+                  ${paymentModeChecked("ONLINE")} Online
+                </span>
+              </div>
+            </div>
+
+            <!-- Bank Details -->
+            <div class="bank-details">
+              <strong>🏦 Schoolay Technologies Private Limited</strong><br />
+              Punjab National Bank, Indiranagar<br />
+              <strong>Account Number:</strong> 1268002100016836 &nbsp;|&nbsp;
+              <strong>IFSC:</strong> PUNB0126800
+            </div>
+
+            <!-- Items Table -->
+            <table class="items-table">
               <thead>
                 <tr>
-                  <th>S.No.</th>
-                  <th>Item</th>
-                  <th>Gender</th>
-                  <th>Size</th>
-                  <th>Qty</th>
-                  <th>Unit Price</th>
-                  <th>GST</th>
-                  <th>Total</th>
+                  <th style="width:40px;">#</th>
+                  <th style="width:28%;">Item</th>
+                  <th style="width:10%;">Gender</th>
+                  <th style="width:10%;">Size</th>
+                  <th style="width:8%;">Qty</th>
+                  <th style="width:13%;">Unit Price</th>
+                  <th style="width:8%;">GST</th>
+                  <th style="width:14%;text-align:right;">Total</th>
                 </tr>
               </thead>
 
@@ -1064,34 +1319,50 @@ const [
               </tbody>
             </table>
 
-            <div class="summary">
-              <div>
-                <span>Taxable Amount</span>
-                <strong>${formatCurrency(
-                  invoice.taxableAmount
-                )}</strong>
+            <!-- Summary -->
+            <div class="summary-section">
+              <div class="summary-box">
+                <div class="summary-row">
+                  <span>Taxable Amount</span>
+                  <span class="amount">${formatCurrency(invoice.taxableAmount)}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Total GST</span>
+                  <span class="amount">${formatCurrency(invoice.totalGstAmount)}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Round Off</span>
+                  <span class="amount">${formatCurrency(invoice.roundOff)}</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-grand">
+                  <span>Grand Total</span>
+                  <span>${formatCurrency(invoice.grandTotal)}</span>
+                </div>
               </div>
+            </div>
 
-              <div>
-                <span>Total GST</span>
-                <strong>${formatCurrency(
-                  invoice.totalGstAmount
-                )}</strong>
-              </div>
+            <!-- Terms & Conditions -->
+            <div class="terms-section">
+              <p class="terms-title">📋 Terms &amp; Conditions</p>
+              <ul class="terms-list">
+                <li>All sales are final. <span class="highlight">No refund policy.</span></li>
+                <li>Refund (if approved) requires School TC copy.</li>
+                <li>Exchange allowed within <strong>7 working days</strong> with original bill.</li>
+                <li>Exchange limited to size exchange &amp; with original tags.</li>
+                <li>Size &amp; items must be checked at purchase. <span class="highlight">No claims after wash/use.</span></li>
+                <li><span class="highlight">NO exchange</span> for customized items (printed/embroidered).</li>
+                <li>Belts, socks, ties, badges &amp; winter wear are non-returnable/non-exchangeable.</li>
+                <li>Colours, sizes &amp; stock subject to change without prior notice.</li>
+                <li>Prices subject to change without prior notice.</li>
+                <li>Online orders: Tracking details will be shared. Courier handled via authorized partner.</li>
+                <li>Delivery queries may be addressed to courier partner with tracking ID.</li>
+              </ul>
+            </div>
 
-              <div>
-                <span>Round Off</span>
-                <strong>${formatCurrency(
-                  invoice.roundOff
-                )}</strong>
-              </div>
-
-              <div class="grand-total">
-                <span>Grand Total</span>
-                <strong>${formatCurrency(
-                  invoice.grandTotal
-                )}</strong>
-              </div>
+            <!-- Footer -->
+            <div class="footer-section">
+              Thank you for your business! — Schoolay Technologies Private Limited
             </div>
           </div>
 
@@ -1150,56 +1421,56 @@ const [
 
   async function handleExportInvoices():
   Promise<void> {
-  if (
-    !exportFromDate ||
-    !exportToDate
-  ) {
-    setNotification({
-      type: "error",
-      message:
-        "Select From Date and To Date."
-    });
+    if (
+      !exportFromDate ||
+      !exportToDate
+    ) {
+      setNotification({
+        type: "error",
+        message:
+          "Select From Date and To Date."
+      });
 
-    return;
+      return;
+    }
+
+    if (
+      exportToDate <
+      exportFromDate
+    ) {
+      setNotification({
+        type: "error",
+        message:
+          "To Date cannot be before From Date."
+      });
+
+      return;
+    }
+
+    try {
+      setIsExportingExcel(true);
+      setNotification(null);
+
+      await downloadInvoicesExcel(
+        exportFromDate,
+        exportToDate
+      );
+
+      setNotification({
+        type: "success",
+        message:
+          "Invoices exported successfully."
+      });
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message:
+          getErrorMessage(error)
+      });
+    } finally {
+      setIsExportingExcel(false);
+    }
   }
-
-  if (
-    exportToDate <
-    exportFromDate
-  ) {
-    setNotification({
-      type: "error",
-      message:
-        "To Date cannot be before From Date."
-    });
-
-    return;
-  }
-
-  try {
-    setIsExportingExcel(true);
-    setNotification(null);
-
-    await downloadInvoicesExcel(
-      exportFromDate,
-      exportToDate
-    );
-
-    setNotification({
-      type: "success",
-      message:
-        "Invoices exported successfully."
-    });
-  } catch (error) {
-    setNotification({
-      type: "error",
-      message:
-        getErrorMessage(error)
-    });
-  } finally {
-    setIsExportingExcel(false);
-  }
-}
 
   return (
     <section>
@@ -1230,192 +1501,189 @@ const [
       )}
 
       <div className="content-card">
-      <div className="invoice-export-toolbar">
+        <div className="invoice-export-toolbar">
+          <div className="invoice-export-field">
+            <label htmlFor="exportFromDate">
+              From Date
+            </label>
 
-  <div className="invoice-export-field">
-    <label htmlFor="exportFromDate">
-      From Date
-    </label>
+            <input
+              id="exportFromDate"
+              type="date"
+              value={exportFromDate}
+              onChange={(event) =>
+                setExportFromDate(event.target.value)
+              }
+            />
+          </div>
 
-    <input
-      id="exportFromDate"
-      type="date"
-      value={exportFromDate}
-      onChange={(event) =>
-        setExportFromDate(event.target.value)
-      }
-    />
-  </div>
+          <div className="invoice-export-field">
+            <label htmlFor="exportToDate">
+              To Date
+            </label>
 
-  <div className="invoice-export-field">
-    <label htmlFor="exportToDate">
-      To Date
-    </label>
+            <input
+              id="exportToDate"
+              type="date"
+              value={exportToDate}
+              min={exportFromDate}
+              onChange={(event) =>
+                setExportToDate(event.target.value)
+              }
+            />
+          </div>
 
-    <input
-      id="exportToDate"
-      type="date"
-      value={exportToDate}
-      min={exportFromDate}
-      onChange={(event) =>
-        setExportToDate(event.target.value)
-      }
-    />
-  </div>
-
-  <button
-    type="button"
-    className="invoice-export-button"
-    disabled={isExportingExcel}
-    onClick={() =>
-      void handleExportInvoices()
-    }
-  >
-    📊{" "}
-    {isExportingExcel
-      ? "Exporting..."
-      : "Export Excel"}
-  </button>
-
-</div>
-        <form
-  className="filter-section invoice-filters"
-  onSubmit={handleSearchSubmit}
->
-  {/* Row 1: Search Input and Search Button */}
-  <div className="search-row">
-    <div className="search-input-wrapper">
-      <input
-        type="search"
-        value={searchInput}
-        onChange={(event) =>
-          setSearchInput(event.target.value)
-        }
-        placeholder="Invoice number, student, class or phone"
-      />
-    </div>
-
-    <button
-      type="submit"
-      className="search-button"
-    >
-      Search
-    </button>
-  </div>
-
-  {/* Row 2: All Filters Side by Side */}
-  <div className="filters-row">
-    <div className="filter-group">
-      <label className="filter-label">School</label>
-      <select
-        value={schoolFilter}
-        onChange={(event) => {
-          setSchoolFilter(event.target.value);
-          setPagination((currentValue) => ({
-            ...currentValue,
-            page: 1
-          }));
-        }}
-      >
-        <option value="">All schools</option>
-        {schools.map((school) => (
-          <option
-            key={school._id}
-            value={school._id}
+          <button
+            type="button"
+            className="invoice-export-button"
+            disabled={isExportingExcel}
+            onClick={() =>
+              void handleExportInvoices()
+            }
           >
-            {school.schoolName}
-          </option>
-        ))}
-      </select>
-    </div>
+            📊{" "}
+            {isExportingExcel
+              ? "Exporting..."
+              : "Export Excel"}
+          </button>
+        </div>
 
-    <div className="filter-group">
-      <label className="filter-label">Invoice Status</label>
-      <select
-        value={invoiceStatusFilter}
-        onChange={(event) => {
-          setInvoiceStatusFilter(
-            event.target.value as
-              | InvoiceStatus
-              | ""
-          );
-          setPagination((currentValue) => ({
-            ...currentValue,
-            page: 1
-          }));
-        }}
-      >
-        <option value="">All statuses</option>
-        <option value="DRAFT">Draft</option>
-        <option value="COMPLETED">Completed</option>
-        <option value="CANCELLED">Cancelled</option>
-      </select>
-    </div>
+        <form
+          className="filter-section invoice-filters"
+          onSubmit={handleSearchSubmit}
+        >
+          <div className="search-row">
+            <div className="search-input-wrapper">
+              <input
+                type="search"
+                value={searchInput}
+                onChange={(event) =>
+                  setSearchInput(event.target.value)
+                }
+                placeholder="Invoice number, student, class or phone"
+              />
+            </div>
 
-    <div className="filter-group">
-      <label className="filter-label">Payment Status</label>
-      <select
-        value={paymentStatusFilter}
-        onChange={(event) => {
-          setPaymentStatusFilter(
-            event.target.value as
-              | PaymentStatus
-              | ""
-          );
-          setPagination((currentValue) => ({
-            ...currentValue,
-            page: 1
-          }));
-        }}
-      >
-        <option value="">All payments</option>
-        <option value="PENDING">Pending</option>
-        <option value="PARTIALLY_PAID">Partially Paid</option>
-        <option value="PAID">Paid</option>
-      </select>
-    </div>
+            <button
+              type="submit"
+              className="search-button"
+            >
+              Search
+            </button>
+          </div>
 
-    <div className="filter-group">
-      <label className="filter-label">Date From</label>
-      <input
-        type="date"
-        value={dateFrom}
-        onChange={(event) => {
-          setDateFrom(event.target.value);
-          setPagination((currentValue) => ({
-            ...currentValue,
-            page: 1
-          }));
-        }}
-      />
-    </div>
+          <div className="filters-row">
+            <div className="filter-group">
+              <label className="filter-label">School</label>
+              <select
+                value={schoolFilter}
+                onChange={(event) => {
+                  setSchoolFilter(event.target.value);
+                  setPagination((currentValue) => ({
+                    ...currentValue,
+                    page: 1
+                  }));
+                }}
+              >
+                <option value="">All schools</option>
+                {schools.map((school) => (
+                  <option
+                    key={school._id}
+                    value={school._id}
+                  >
+                    {school.schoolName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-    <div className="filter-group">
-      <label className="filter-label">Date To</label>
-      <input
-        type="date"
-        value={dateTo}
-        onChange={(event) => {
-          setDateTo(event.target.value);
-          setPagination((currentValue) => ({
-            ...currentValue,
-            page: 1
-          }));
-        }}
-      />
-    </div>
+            <div className="filter-group">
+              <label className="filter-label">Invoice Status</label>
+              <select
+                value={invoiceStatusFilter}
+                onChange={(event) => {
+                  setInvoiceStatusFilter(
+                    event.target.value as
+                      | InvoiceStatus
+                      | ""
+                  );
+                  setPagination((currentValue) => ({
+                    ...currentValue,
+                    page: 1
+                  }));
+                }}
+              >
+                <option value="">All statuses</option>
+                <option value="DRAFT">Draft</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
 
-    <div className="clear-filter-group">
-      <button
-        type="button"
-        className="clear-button"
-        onClick={clearFilters}
-      >
-        Clear All
-      </button>
-    </div>
-  </div>
-</form>
+            <div className="filter-group">
+              <label className="filter-label">Payment Status</label>
+              <select
+                value={paymentStatusFilter}
+                onChange={(event) => {
+                  setPaymentStatusFilter(
+                    event.target.value as
+                      | PaymentStatus
+                      | ""
+                  );
+                  setPagination((currentValue) => ({
+                    ...currentValue,
+                    page: 1
+                  }));
+                }}
+              >
+                <option value="">All payments</option>
+                <option value="PENDING">Pending</option>
+                <option value="PARTIALLY_PAID">Partially Paid</option>
+                <option value="PAID">Paid</option>
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label className="filter-label">Date From</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(event) => {
+                  setDateFrom(event.target.value);
+                  setPagination((currentValue) => ({
+                    ...currentValue,
+                    page: 1
+                  }));
+                }}
+              />
+            </div>
+
+            <div className="filter-group">
+              <label className="filter-label">Date To</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(event) => {
+                  setDateTo(event.target.value);
+                  setPagination((currentValue) => ({
+                    ...currentValue,
+                    page: 1
+                  }));
+                }}
+              />
+            </div>
+
+            <div className="clear-filter-group">
+              <button
+                type="button"
+                className="clear-button"
+                onClick={clearFilters}
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+        </form>
 
         {isLoading ? (
           <LoadingSpinner message="Loading invoices..." />
@@ -1429,7 +1697,6 @@ const [
           </div>
         ) : (
           <>
-            {/* Desktop Table View */}
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -1593,7 +1860,6 @@ const [
               </table>
             </div>
 
-            {/* Mobile Card View */}
             <div className="mobile-card-view">
               {invoices.map((invoice) => (
                 <div className="data-card invoice-card" key={invoice._id}>
@@ -1797,6 +2063,7 @@ const [
                     ))}
                 </select>
               </div>
+
               <div className="form-field">
                 <label htmlFor="placeOfOrder">
                   Place of Order <span>*</span>
@@ -1869,7 +2136,6 @@ const [
                   />
                 </div>
               )}
-              
 
               <div className="form-field">
                 <label htmlFor="studentName">
