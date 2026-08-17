@@ -25,7 +25,7 @@ import storeReportRoutes from "./routes/storeReport.routes.js";
 
 const app: Application = express();
 
-const defaultAllowedOrigins = [
+const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://schoolsay.myshopify.com",
@@ -33,31 +33,44 @@ const defaultAllowedOrigins = [
   "https://www.shopschoolay.com"
 ];
 
-const environmentAllowedOrigins =
-  (process.env.ALLOWED_ORIGINS ?? "")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
-const allowedOrigins = [
-  ...new Set([
-    ...defaultAllowedOrigins,
-    ...environmentAllowedOrigins
-  ])
-];
-
 app.use(
   cors({
     origin(origin, callback) {
+      // Postman, Render health check, server requests
       if (!origin) {
         callback(null, true);
         return;
       }
 
+      // Explicitly allowed origins
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
+
+      // Also allow Shopify storefront domains
+      if (
+        origin.startsWith("https://") &&
+        origin.endsWith(".myshopify.com")
+      ) {
+        callback(null, true);
+        return;
+      }
+
+      console.error(
+        "Blocked CORS origin:",
+        origin
+      );
+
+      console.log(
+  "Allowed CORS origins:",
+  allowedOrigins
+);
+
+console.log(
+  "Incoming request origin:",
+  origin
+);
 
       callback(
         new Error(
@@ -65,8 +78,6 @@ app.use(
         )
       );
     },
-
-    credentials: true,
 
     methods: [
       "GET",
