@@ -28,7 +28,10 @@ const app: Application = express();
 
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS ??
-  "http://localhost:5173,http://localhost:5174"
+  "http://localhost:5173,http://localhost:5174",
+  "https://schoolsay.myshopify.com",
+  "https://shopschoolay.com",
+  "https://www.shopschoolay.com"
 )
   .split(",")
   .map((origin) => origin.trim())
