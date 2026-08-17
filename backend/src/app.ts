@@ -29,7 +29,7 @@ const app: Application = express();
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS ??
   "http://localhost:5173,http://localhost:5174",
-  "https://schoolsay.myshopify.com",
+  "https://schoolay.myshopify.com",
   "https://shopschoolay.com",
   "https://www.shopschoolay.com"
 )
