@@ -16,7 +16,8 @@ import {
   getStudentMeasurementById,
   getStudentMeasurementReportData,
   getStudentMeasurements,
-  updateStudentMeasurement
+  updateStudentMeasurement,
+  getStudentMeasurementsByMobileNumber,
 } from "../services/studentMeasurement.service.js";
 
 type StudentGender =
@@ -303,6 +304,44 @@ export const createStudentMeasurementController:
         message:
           "Student measurement record created successfully.",
         data: record
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  export const getStudentMeasurementsByMobileController:
+  RequestHandler = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const mobileNumber =
+        getStringQuery(
+          request,
+          "mobileNumber"
+        );
+
+      if (!mobileNumber) {
+        response.status(400).json({
+          success: false,
+          message:
+            "Mobile number is required."
+        });
+
+        return;
+      }
+
+      const records =
+        await getStudentMeasurementsByMobileNumber(
+          mobileNumber
+        );
+
+      response.status(200).json({
+        success: true,
+        count: records.length,
+        data: records
       });
     } catch (error) {
       next(error);

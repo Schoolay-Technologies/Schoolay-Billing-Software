@@ -7,7 +7,8 @@ import {
   getStudentMeasurementByIdController,
   getStudentMeasurementReportController,
   getStudentMeasurementsController,
-  updateStudentMeasurementController
+  updateStudentMeasurementController,
+  getStudentMeasurementsByMobileController,
 } from "../controllers/studentMeasurement.controller";
 
 import {
@@ -47,6 +48,11 @@ router.get(
   downloadStudentMeasurementExcelController
 );
 
+router.get(
+  "/lookup/mobile",
+  getStudentMeasurementsByMobileController
+);
+
 router.post(
   "/",
   validate(
@@ -59,6 +65,8 @@ router.get(
   "/",
   getStudentMeasurementsController
 );
+
+
 
 router.get(
   "/:id",

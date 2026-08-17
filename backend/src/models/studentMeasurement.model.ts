@@ -228,6 +228,12 @@ const studentMeasurementSchema =
         index: true
       },
 
+      mobileNumber: {
+        type: String,
+        trim: true,
+        default: ""
+      },
+
       studentId: {
         type: String,
         required: true,

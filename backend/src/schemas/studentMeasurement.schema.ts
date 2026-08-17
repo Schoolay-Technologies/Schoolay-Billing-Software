@@ -168,6 +168,16 @@ export const studentMeasurementBodySchema =
       )
       .max(100),
 
+    mobileNumber: z
+      .string()
+      .trim()
+      .regex(
+        /^[6-9]\d{9}$/,
+        "Enter a valid 10-digit mobile number"
+      )
+      .optional()
+      .or(z.literal("")),
+
     className: z
       .string()
       .trim()

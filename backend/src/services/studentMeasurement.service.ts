@@ -361,6 +361,8 @@ export async function createStudentMeasurement(
 
     studentName:
       input.studentName,
+    mobileNumber:
+      input.mobileNumber || "",
     studentId:
       input.studentId,
     className:
@@ -446,6 +448,8 @@ export async function updateStudentMeasurement(
 
   record.studentName =
     input.studentName;
+  record.mobileNumber =
+    input.mobileNumber || "";
   record.studentId =
     input.studentId;
   record.className =
@@ -534,6 +538,47 @@ export async function deleteStudentMeasurement(
   }
 
   return record;
+}
+
+export async function getStudentMeasurementsByMobileNumber(
+  mobileNumber: string
+) {
+  const normalizedMobileNumber =
+    mobileNumber.trim();
+
+  if (!/^[6-9]\d{9}$/.test(normalizedMobileNumber)) {
+    throw new Error(
+      "Enter a valid 10-digit mobile number."
+    );
+  }
+
+  const records =
+    await StudentMeasurementModel.find({
+      mobileNumber: normalizedMobileNumber,
+      status: "ACTIVE"
+    })
+      .select({
+        schoolName: 1,
+        schoolCode: 1,
+        studentName: 1,
+        mobileNumber: 1,
+        studentId: 1,
+        className: 1,
+        section: 1,
+        gender: 1,
+        academicYear: 1,
+        photo: 1,
+        measurements: 1,
+        recommendedSize: 1,
+        measurementDate: 1,
+        items: 1
+      })
+      .sort({
+        studentName: 1
+      })
+      .lean();
+
+  return records;
 }
 
 export async function getStudentMeasurements(
@@ -760,6 +805,12 @@ export async function generateStudentMeasurementExcel(
       header: "Student Name",
       key: "studentName",
       width: 25
+    },
+
+    {
+      header: "Mobile Number",
+      key: "mobileNumber",
+      width: 18
     },
 
     {
@@ -1005,6 +1056,9 @@ export async function generateStudentMeasurementExcel(
           studentName:
             record.studentName,
 
+          mobileNumber:
+            record.mobileNumber || "",
+
           studentId:
             record.studentId,
 
@@ -1205,4 +1259,3 @@ export async function generateStudentMeasurementExcel(
 
   return Buffer.from(buffer);
 }
-

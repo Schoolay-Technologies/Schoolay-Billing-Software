@@ -67,6 +67,7 @@ export interface StudentMeasurementInput {
 
   studentName: string;
   studentId: string;
+  mobileNumber: string;
 
   className: string;
   section: string;
@@ -138,6 +139,7 @@ export interface StudentMeasurementRecord {
 
   studentName: string;
   studentId: string;
+  mobileNumber: string;
 
   className: string;
   section: string;

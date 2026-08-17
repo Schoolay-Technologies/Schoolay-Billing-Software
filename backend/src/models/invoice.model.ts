@@ -388,7 +388,24 @@ const invoiceSchema = new Schema(
     cancelledAt: {
       type: Date,
       default: null
-    }
+    },
+    publicInvoiceToken: {
+  type: String,
+  trim: true,
+  unique: true,
+  sparse: true,
+  index: true
+},
+
+invoiceLinkSmsSent: {
+  type: Boolean,
+  default: false
+},
+
+invoiceLinkSmsSentAt: {
+  type: Date,
+  default: null
+},
   },
   {
     timestamps: true,
@@ -416,3 +433,4 @@ export const InvoiceModel = model<Invoice>(
   "Invoice",
   invoiceSchema
 );
+

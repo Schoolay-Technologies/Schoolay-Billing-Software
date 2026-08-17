@@ -218,6 +218,7 @@ function createInitialForm():
   return {
     schoolId: "",
     studentName: "",
+    mobileNumber: "",
     studentId: "",
     className: "",
     section: "",
@@ -804,6 +805,9 @@ export default function StudentMeasurementsPage() {
         studentId:
           record.studentId,
 
+        mobileNumber:
+          record.mobileNumber || "",
+
         className:
           record.className,
 
@@ -1373,6 +1377,9 @@ export default function StudentMeasurementsPage() {
       studentId:
         formData.studentId.trim(),
 
+      mobileNumber:
+        formData.mobileNumber.trim(),
+
       className:
         formData.className.trim(),
 
@@ -1869,6 +1876,7 @@ export default function StudentMeasurementsPage() {
                     <th>Photo</th>
                     <th>Date</th>
                     <th>Student</th>
+                    <th>Mobile</th>
                     <th>School</th>
                     <th>Class</th>
                     <th>Gender</th>
@@ -1943,6 +1951,10 @@ export default function StudentMeasurementsPage() {
                               }
                             </span>
                           </div>
+                        </td>
+
+                        <td>
+                          {record.mobileNumber || "—"}
                         </td>
 
                         <td>
@@ -2098,6 +2110,11 @@ export default function StudentMeasurementsPage() {
                         "No Photo"
                       )}
                     </span>
+                  </div>
+
+                  <div className="data-card-item">
+                    <span className="label">Mobile</span>
+                    <span className="value">{record.mobileNumber || "—"}</span>
                   </div>
 
                   <div className="data-card-item">
@@ -2461,6 +2478,29 @@ export default function StudentMeasurementsPage() {
                           )
                         }
                         required
+                      />
+                    </div>
+
+                    <div className="form-field">
+                      <label htmlFor="measurementMobileNumber">
+                        Mobile Number
+                      </label>
+
+                      <input
+                        id="measurementMobileNumber"
+                        type="tel"
+                        value={
+                          formData.mobileNumber
+                        }
+                        onChange={(event) =>
+                          updateFormField(
+                            "mobileNumber",
+                            event.target
+                              .value
+                          )
+                        }
+                        placeholder="Enter 10-digit mobile number"
+                        maxLength={10}
                       />
                     </div>
 
@@ -3350,6 +3390,15 @@ export default function StudentMeasurementsPage() {
                     }
                   </p>
 
+                  {selectedRecord.mobileNumber && (
+                    <p>
+                      Mobile:{" "}
+                      {
+                        selectedRecord.mobileNumber
+                      }
+                    </p>
+                  )}
+
                   <span
                     className={`status-badge ${getStatusClass(
                       selectedRecord.status
@@ -3978,8 +4027,8 @@ export default function StudentMeasurementsPage() {
           <div className="student-measurement-report-note">
             The Excel report will
             include student profile,
-            photo URL, body
-            measurements, item,
+            mobile number, photo URL,
+            body measurements, item,
             quantity, recommended size,
             manual override and final
             size in separate columns.
