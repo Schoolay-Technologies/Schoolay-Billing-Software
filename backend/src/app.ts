@@ -32,7 +32,6 @@ const allowedOrigins = (
   "https://schoolay.myshopify.com",
   "https://shopschoolay.com",
   "https://www.shopschoolay.com",
-  "https://www.shopschoolay.com/",
 )
   .split(",")
   .map((origin) => origin.trim())
