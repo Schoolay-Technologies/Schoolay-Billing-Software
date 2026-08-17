@@ -26,16 +26,26 @@ import storeReportRoutes from
 
 const app: Application = express();
 
-const allowedOrigins = (
-  process.env.ALLOWED_ORIGINS ??
-  "http://localhost:5173,http://localhost:5174",
+const defaultAllowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
   "https://schoolsay.myshopify.com",
   "https://shopschoolay.com",
   "https://www.shopschoolay.com"
-)
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+];
+
+const environmentAllowedOrigins =
+  (process.env.ALLOWED_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const allowedOrigins = [
+  ...new Set([
+    ...defaultAllowedOrigins,
+    ...environmentAllowedOrigins
+  ])
+];
 
 app.use(
   cors({
