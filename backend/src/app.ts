@@ -21,8 +21,7 @@ import reportRoutes from "./routes/report.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import studentMeasurementRoutes from "./routes/studentSizeRecord.routes.js";
 import campRoutes from "./routes/camp.routes.js";
-import storeReportRoutes from
-  "./routes/storeReport.routes.js";
+import storeReportRoutes from "./routes/storeReport.routes.js";
 
 const app: Application = express();
 
@@ -50,11 +49,6 @@ const allowedOrigins = [
 app.use(
   cors({
     origin(origin, callback) {
-      /*
-       * Allow requests without an Origin header,
-       * such as Render health checks, Postman,
-       * curl and direct browser navigation.
-       */
       if (!origin) {
         callback(null, true);
         return;
