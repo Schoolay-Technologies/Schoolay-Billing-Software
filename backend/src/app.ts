@@ -29,6 +29,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://schoolsay.myshopify.com",
+  "https://schoolay-billing-software-gf5t.vercel.app",
   "https://shopschoolay.com",
   "https://www.shopschoolay.com"
 ];
