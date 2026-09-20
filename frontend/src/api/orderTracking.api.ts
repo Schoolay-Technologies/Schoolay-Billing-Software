@@ -77,3 +77,7 @@ export async function updateExchangeStatus(
 
   return response.data;
 }
+
+export async function checkBackendHealth(): Promise<void> {
+  await api.get("/health");
+}
